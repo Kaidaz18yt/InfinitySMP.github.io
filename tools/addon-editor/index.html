@@ -146,6 +146,9 @@
                 margin-bottom: 24px;
             }
 
+            /* Hidden until pack is loaded */
+            .editor-card.hidden { display: none; }
+
             .section-title {
                 font-size: 13px;
                 font-weight: 600;
@@ -294,6 +297,35 @@
                 padding: 8px 0;
             }
 
+            /* ── Success toast ── */
+            .toast {
+                position: fixed;
+                bottom: 32px;
+                left: 50%;
+                transform: translateX(-50%) translateY(80px);
+                background: var(--bg-tertiary);
+                border: 1px solid var(--accent);
+                color: var(--text-primary);
+                padding: 14px 24px;
+                border-radius: var(--radius-md);
+                font-size: 14px;
+                font-weight: 500;
+                box-shadow: var(--shadow-lg);
+                z-index: 9999;
+                opacity: 0;
+                transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+                pointer-events: none;
+                white-space: nowrap;
+            }
+            .toast.show {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            .toast.error {
+                border-color: #f44336;
+                color: #ef9a9a;
+            }
+
             /* ── Buttons ── */
             button.primary {
                 width: 100%;
@@ -372,6 +404,8 @@
             <div class="particle"></div><div class="particle"></div>
         </div>
 
+        <div class="toast" id="toast"></div>
+
         <div class="container">
             <div class="header">
                 <div class="logo-container">
@@ -392,8 +426,8 @@
                 </div>
             </div>
 
-            <!-- Per-pack metadata (tabs when mcaddon) -->
-            <div class="editor-card" id="metaCard">
+            <!-- Per-pack metadata (tabs when mcaddon) — hidden until loaded -->
+            <div class="editor-card hidden" id="metaCard">
                 <div class="section-title">Pack Metadata</div>
 
                 <!-- Tab bar (hidden for single-pack files) -->
@@ -403,8 +437,8 @@
                 <div id="packPanels"></div>
             </div>
 
-            <!-- Shared / global fields -->
-            <div class="editor-card">
+            <!-- Icon & Download — hidden until loaded -->
+            <div class="editor-card hidden" id="saveCard">
                 <div class="section-title">Icon &amp; Download</div>
 
                 <div class="form-group">
@@ -426,11 +460,25 @@
         <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
         <script>
         // ─────────────────────────────────────────────
+        //  Toast helper (replaces alert())
+        // ─────────────────────────────────────────────
+        function showToast(msg, isError = false) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast' + (isError ? ' error' : '');
+            // Force reflow so transition fires
+            void t.offsetWidth;
+            t.classList.add('show');
+            clearTimeout(t._timer);
+            t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // ─────────────────────────────────────────────
         //  State
         // ─────────────────────────────────────────────
-        let currentZip = null;           // JSZip of the outer file
+        let currentZip = null;
         let isMcaddon  = false;
-        // Array of { label, manifestPath, manifest, subZipPath (null for .mcpack) }
+        // Array of { label, manifestPath, manifest, subZipPath (null for .mcpack), subZip }
         let packs = [];
 
         // ─────────────────────────────────────────────
@@ -443,106 +491,119 @@
             });
         }
 
+        function escHtml(s) {
+            return String(s ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function regenUUID(inputId) {
+            document.getElementById(inputId).value = generateUUID();
+        }
+
         // ─────────────────────────────────────────────
         //  Build UI for a single pack panel
         // ─────────────────────────────────────────────
         function buildPackPanel(pack, idx) {
-            const m  = pack.manifest;
-            const hd = m.header || {};
+            const m    = pack.manifest;
+            const hd   = m.header   || {};
             const meta = m.metadata || {};
 
-            const name    = hd.name        || '';
-            const desc    = hd.description || '';
-            const authors = (hd.authors || meta.authors || []).join(', ');
-            const url     = meta.url     || '';
-            const license = meta.license || '';
+            const name    = hd.name        ?? '';
+            const desc    = hd.description ?? '';
 
-            const headerUUID = hd.uuid || '';
-            const moduleUUIDs = (m.modules || []).map(mod => mod.uuid || '');
+            // Authors can live in header.authors OR metadata.authors
+            const rawAuthors = hd.authors ?? meta.authors ?? [];
+            const authors = Array.isArray(rawAuthors) ? rawAuthors.join(', ') : String(rawAuthors);
 
-            // Dependencies from header or top-level
-            const deps = hd.dependencies || m.dependencies || [];
+            const url     = meta.url     ?? '';
+            const license = meta.license ?? '';
 
-            // ── Dep rows HTML ──
+            const headerUUID  = hd.uuid ?? '';
+            const moduleUUIDs = (m.modules || []).map(mod => mod.uuid ?? '');
+
+            // Dependencies — check both header.dependencies and top-level m.dependencies
+            const deps = hd.dependencies ?? m.dependencies ?? [];
+
+            // ── Dependency rows ──
             let depRowsHTML = '';
-            if (deps.length === 0) {
+            if (!deps.length) {
                 depRowsHTML = '<p class="no-deps">No dependencies found.</p>';
             } else {
                 deps.forEach((dep, di) => {
-                    const depUUID = dep.uuid || '';
+                    const ver = Array.isArray(dep.version) ? dep.version.join('.') : (dep.version ?? '?');
                     depRowsHTML += `
                         <div class="dep-item">
-                            <div class="dep-label">Dependency ${di + 1}${dep.description ? ' — ' + dep.description : ''} (v${(dep.version||[]).join('.')})</div>
+                            <div class="dep-label">Dependency ${di + 1}${dep.description ? ' — ' + escHtml(dep.description) : ''} (v${ver})</div>
                             <div class="uuid-row">
-                                <input type="text" data-pack="${idx}" data-dep="${di}" id="dep-${idx}-${di}" value="${depUUID}" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+                                <input type="text" id="dep-${idx}-${di}" value="${escHtml(dep.uuid ?? '')}" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
                                 <button class="btn-regen" title="Regenerate UUID" onclick="regenUUID('dep-${idx}-${di}')">↻</button>
                             </div>
                         </div>`;
                 });
             }
 
-            // ── Module UUID rows ──
+            // ── Module rows ──
             let modRowsHTML = '';
-            if (moduleUUIDs.length === 0) {
+            if (!moduleUUIDs.length) {
                 modRowsHTML = '<p class="no-deps">No modules found.</p>';
             } else {
-                moduleUUIDs.forEach((uuid, mi) => {
+                m.modules.forEach((mod, mi) => {
                     modRowsHTML += `
                         <div class="dep-item">
-                            <div class="dep-label">Module ${mi + 1}${m.modules[mi].type ? ' — ' + m.modules[mi].type : ''}</div>
+                            <div class="dep-label">Module ${mi + 1}${mod.type ? ' — ' + escHtml(mod.type) : ''}</div>
                             <div class="uuid-row">
-                                <input type="text" data-pack="${idx}" data-mod="${mi}" id="mod-${idx}-${mi}" value="${uuid}" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+                                <input type="text" id="mod-${idx}-${mi}" value="${escHtml(mod.uuid ?? '')}" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
                                 <button class="btn-regen" title="Regenerate UUID" onclick="regenUUID('mod-${idx}-${mi}')">↻</button>
                             </div>
                         </div>`;
                 });
             }
 
+            // Build the panel HTML.
+            // IMPORTANT: textarea content must NOT use innerHTML escaping the same way —
+            // we set it via textContent after insertion to avoid double-encoding.
+            const panelId = `panel-inner-${idx}`;
             return `
-                <div class="form-group">
-                    <label>Pack Name</label>
-                    <input type="text" id="name-${idx}" value="${escHtml(name)}" placeholder="Enter pack name…" />
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="desc-${idx}" rows="3" placeholder="Enter pack description…">${escHtml(desc)}</textarea>
-                </div>
-                <div class="form-group">
-                    <label>Authors <span class="label-hint">(comma separated)</span></label>
-                    <input type="text" id="authors-${idx}" value="${escHtml(authors)}" placeholder="Author1, Author2…" />
-                </div>
-                <div class="form-group">
-                    <label>Homepage URL <span class="label-hint">(optional)</span></label>
-                    <input type="text" id="url-${idx}" value="${escHtml(url)}" placeholder="https://example.com" />
-                </div>
-                <div class="form-group">
-                    <label>License URL <span class="label-hint">(optional)</span></label>
-                    <input type="text" id="license-${idx}" value="${escHtml(license)}" placeholder="https://example.com/license" />
-                </div>
-
-                <div class="section-title" style="margin-top:8px">Pack UUID (header)</div>
-                <div class="form-group">
-                    <label>Header UUID</label>
-                    <div class="uuid-row">
-                        <input type="text" id="huuid-${idx}" value="${escHtml(headerUUID)}" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
-                        <button class="btn-regen" title="Regenerate UUID" onclick="regenUUID('huuid-${idx}')">↻</button>
+                <div id="${panelId}">
+                    <div class="form-group">
+                        <label>Pack Name</label>
+                        <input type="text" id="name-${idx}" value="${escHtml(name)}" placeholder="Enter pack name…" />
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="desc-${idx}" rows="3" placeholder="Enter pack description…"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Authors <span class="label-hint">(comma separated)</span></label>
+                        <input type="text" id="authors-${idx}" value="${escHtml(authors)}" placeholder="Author1, Author2…" />
+                    </div>
+                    <div class="form-group">
+                        <label>Homepage URL <span class="label-hint">(optional)</span></label>
+                        <input type="text" id="url-${idx}" value="${escHtml(url)}" placeholder="https://example.com" />
+                    </div>
+                    <div class="form-group">
+                        <label>License URL <span class="label-hint">(optional)</span></label>
+                        <input type="text" id="license-${idx}" value="${escHtml(license)}" placeholder="https://example.com/license" />
+                    </div>
 
-                <div class="section-title">Module UUIDs</div>
-                <div class="deps-list">${modRowsHTML}</div>
+                    <div class="section-title" style="margin-top:8px">Pack UUID (header)</div>
+                    <div class="form-group">
+                        <label>Header UUID</label>
+                        <div class="uuid-row">
+                            <input type="text" id="huuid-${idx}" value="${escHtml(headerUUID)}" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+                            <button class="btn-regen" title="Regenerate UUID" onclick="regenUUID('huuid-${idx}')">↻</button>
+                        </div>
+                    </div>
 
-                <div class="section-title" style="margin-top:20px">Dependency UUIDs</div>
-                <div class="deps-list">${depRowsHTML}</div>
-            `;
-        }
+                    <div class="section-title">Module UUIDs</div>
+                    <div class="deps-list">${modRowsHTML}</div>
 
-        function escHtml(s) {
-            return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-        }
-
-        function regenUUID(inputId) {
-            document.getElementById(inputId).value = generateUUID();
+                    <div class="section-title" style="margin-top:20px">Dependency UUIDs</div>
+                    <div class="deps-list">${depRowsHTML}</div>
+                </div>`;
         }
 
         // ─────────────────────────────────────────────
@@ -554,14 +615,19 @@
         }
 
         // ─────────────────────────────────────────────
-        //  Read manifest from a zip entry
+        //  Read manifest from a zip (returns { path, manifest } or null)
         // ─────────────────────────────────────────────
         async function readManifest(zip) {
             const files = Object.keys(zip.files);
             const path  = files.find(p => p.toLowerCase().endsWith('manifest.json') && !zip.files[p].dir);
             if (!path) return null;
             const text = await zip.file(path).async('string');
-            return { path, manifest: JSON.parse(text) };
+            try {
+                return { path, manifest: JSON.parse(text) };
+            } catch (e) {
+                console.error('Failed to parse manifest at', path, e);
+                return null;
+            }
         }
 
         // ─────────────────────────────────────────────
@@ -578,34 +644,39 @@
                 packs      = [];
 
                 if (isMcaddon) {
-                    // .mcaddon is a zip-of-zips
+                    // Try zip-of-zips first
                     const innerFiles = Object.keys(currentZip.files).filter(p =>
                         (p.toLowerCase().endsWith('.mcpack') || p.toLowerCase().endsWith('.mcaddon'))
                         && !currentZip.files[p].dir
                     );
 
                     if (innerFiles.length > 0) {
-                        // Proper zip-of-zips
                         for (const innerPath of innerFiles) {
                             const innerData = await currentZip.file(innerPath).async('arraybuffer');
                             const innerZip  = await JSZip.loadAsync(innerData);
                             const result    = await readManifest(innerZip);
                             if (result) {
-                                const label = innerPath.split('/').pop().replace(/\.(mcpack|mcaddon)$/i,'');
-                                packs.push({ label, manifestPath: result.path, manifest: result.manifest, subZipPath: innerPath, subZip: innerZip });
+                                const label = innerPath.split('/').pop().replace(/\.(mcpack|mcaddon)$/i, '');
+                                packs.push({
+                                    label,
+                                    manifestPath: result.path,
+                                    manifest: result.manifest,
+                                    subZipPath: innerPath,
+                                    subZip: innerZip
+                                });
                             }
                         }
                     }
 
+                    // Fallback: flat .mcaddon with multiple manifest.json files
                     if (packs.length === 0) {
-                        // Flat .mcaddon — multiple manifest.json files in different folders
-                        const allFiles = Object.keys(currentZip.files);
-                        const manifestPaths = allFiles.filter(p => p.toLowerCase().endsWith('manifest.json') && !currentZip.files[p].dir);
+                        const manifestPaths = Object.keys(currentZip.files)
+                            .filter(p => p.toLowerCase().endsWith('manifest.json') && !currentZip.files[p].dir);
 
                         for (const mPath of manifestPaths) {
-                            const text     = await currentZip.file(mPath).async('string');
-                            const manifest = JSON.parse(text);
-                            // Derive label from folder name
+                            const text = await currentZip.file(mPath).async('string');
+                            let manifest;
+                            try { manifest = JSON.parse(text); } catch { continue; }
                             const parts = mPath.split('/');
                             const label = parts.length > 1 ? parts[0] : (manifest.header?.name || mPath);
                             packs.push({ label, manifestPath: mPath, manifest, subZipPath: null, subZip: null });
@@ -614,17 +685,34 @@
                 } else {
                     // Single .mcpack
                     const result = await readManifest(currentZip);
-                    if (!result) { alert('manifest.json not found in the pack.'); return; }
-                    packs.push({ label: 'Pack', manifestPath: result.path, manifest: result.manifest, subZipPath: null, subZip: null });
+                    if (!result) {
+                        showToast('manifest.json not found in the pack.', true);
+                        return;
+                    }
+                    packs.push({
+                        label: 'Pack',
+                        manifestPath: result.path,
+                        manifest: result.manifest,
+                        subZipPath: null,
+                        subZip: null
+                    });
                 }
 
-                if (packs.length === 0) { alert('No valid manifests found in the file.'); return; }
+                if (packs.length === 0) {
+                    showToast('No valid manifests found in the file.', true);
+                    return;
+                }
 
                 renderPackUI();
-                alert('Pack loaded successfully!');
+
+                // Show the metadata and save cards
+                document.getElementById('metaCard').classList.remove('hidden');
+                document.getElementById('saveCard').classList.remove('hidden');
+
+                showToast(`✓ Loaded ${packs.length} pack${packs.length > 1 ? 's' : ''} successfully`);
             } catch (err) {
                 console.error(err);
-                alert('Error loading pack: ' + err.message);
+                showToast('Error loading pack: ' + err.message, true);
             }
         });
 
@@ -641,9 +729,9 @@
                 tabsEl.style.display = 'flex';
                 packs.forEach((pack, i) => {
                     const tab = document.createElement('button');
-                    tab.className = 'pack-tab' + (i === 0 ? ' active' : '');
+                    tab.className   = 'pack-tab' + (i === 0 ? ' active' : '');
                     tab.textContent = pack.label;
-                    tab.onclick = () => switchTab(i);
+                    tab.onclick     = () => switchTab(i);
                     tabsEl.appendChild(tab);
                 });
             } else {
@@ -655,6 +743,11 @@
                 panel.className = 'pack-panel' + (i === 0 ? ' active' : '');
                 panel.innerHTML = buildPackPanel(pack, i);
                 panelsEl.appendChild(panel);
+
+                // Set textarea value via textContent to avoid HTML double-encoding
+                const desc = pack.manifest.header?.description ?? '';
+                const ta = document.getElementById(`desc-${i}`);
+                if (ta) ta.value = desc;
             });
         }
 
@@ -667,25 +760,26 @@
 
             const name    = document.getElementById(`name-${idx}`).value;
             const desc    = document.getElementById(`desc-${idx}`).value;
-            const authors = document.getElementById(`authors-${idx}`).value.split(',').map(a => a.trim()).filter(Boolean);
+            const authors = document.getElementById(`authors-${idx}`).value
+                                .split(',').map(a => a.trim()).filter(Boolean);
             const url     = document.getElementById(`url-${idx}`).value.trim();
             const license = document.getElementById(`license-${idx}`).value.trim();
             const huuid   = document.getElementById(`huuid-${idx}`).value.trim();
 
-            // header
+            if (!m.header) m.header = {};
             m.header.name        = name;
             m.header.description = desc;
             m.header.uuid        = huuid;
 
-            if ('authors' in (m.header)) m.header.authors = authors;
+            // Only write authors where the key already exists
+            if ('authors' in m.header) m.header.authors = authors;
 
-            // metadata
             if (!m.metadata) m.metadata = {};
             if ('authors' in m.metadata) m.metadata.authors = authors;
             if (url)     m.metadata.url     = url;     else delete m.metadata.url;
             if (license) m.metadata.license = license; else delete m.metadata.license;
 
-            // module descriptions + UUIDs
+            // Module UUIDs + description
             if (m.modules) {
                 m.modules.forEach((mod, mi) => {
                     mod.description = desc;
@@ -694,8 +788,8 @@
                 });
             }
 
-            // dependency UUIDs
-            const deps = m.header.dependencies || m.dependencies || [];
+            // Dependency UUIDs
+            const deps = m.header.dependencies ?? m.dependencies ?? [];
             deps.forEach((dep, di) => {
                 const el = document.getElementById(`dep-${idx}-${di}`);
                 if (el) dep.uuid = el.value.trim();
@@ -707,38 +801,29 @@
         // ─────────────────────────────────────────────
         document.getElementById('saveBtn').addEventListener('click', async () => {
             if (!currentZip || packs.length === 0) {
-                alert('Please load a pack first.');
+                showToast('Please load a pack first.', true);
                 return;
             }
 
             try {
-                // Collect all edits
                 packs.forEach((_, i) => collectPackEdits(i));
 
                 const iconFile = document.getElementById('iconpicker').files[0];
-                let iconData   = iconFile ? await iconFile.arrayBuffer() : null;
+                const iconData = iconFile ? await iconFile.arrayBuffer() : null;
 
                 if (isMcaddon && packs[0].subZipPath) {
-                    // ── Zip-of-zips approach ──
                     for (const pack of packs) {
-                        // Write manifest back into sub-zip
                         pack.subZip.file(pack.manifestPath, JSON.stringify(pack.manifest, null, 2));
-
-                        // Icon in sub-zip
                         if (iconData) {
                             const iconPath = findOrCreateIconPath(pack.subZip, pack.manifestPath);
                             pack.subZip.file(iconPath, iconData);
                         }
-
-                        // Re-pack sub-zip into outer zip
                         const updatedInner = await pack.subZip.generateAsync({ type: 'arraybuffer' });
                         currentZip.file(pack.subZipPath, updatedInner);
                     }
                 } else {
-                    // ── Flat zip approach (mcpack or flat mcaddon) ──
                     for (const pack of packs) {
                         currentZip.file(pack.manifestPath, JSON.stringify(pack.manifest, null, 2));
-
                         if (iconData) {
                             const iconPath = findOrCreateIconPath(currentZip, pack.manifestPath);
                             currentZip.file(iconPath, iconData);
@@ -750,24 +835,25 @@
 
                 const originalName = document.getElementById('filepicker').files[0].name;
                 const baseName     = originalName.substring(0, originalName.lastIndexOf('.')) || 'edited_pack';
-                const newName      = prompt('Save file name (without extension)', baseName + '_edited');
+                const ext          = originalName.substring(originalName.lastIndexOf('.') + 1);
+
+                const newName = prompt('Save file name (without extension)', baseName + '_edited');
                 if (!newName) return;
 
-                const ext = originalName.substring(originalName.lastIndexOf('.') + 1);
-                const link = document.createElement('a');
+                const link    = document.createElement('a');
                 link.href     = URL.createObjectURL(content);
                 link.download = newName + '.' + ext;
                 link.click();
 
-                alert('Pack saved successfully!');
+                showToast('✓ Pack saved and downloaded!');
             } catch (err) {
                 console.error(err);
-                alert('Error saving pack: ' + err.message);
+                showToast('Error saving pack: ' + err.message, true);
             }
         });
 
         // ─────────────────────────────────────────────
-        //  Helper — find existing pack_icon.png or derive path from manifest location
+        //  Helper — find existing pack_icon.png path
         // ─────────────────────────────────────────────
         function findOrCreateIconPath(zip, manifestPath) {
             const existing = Object.keys(zip.files).find(p => p.toLowerCase().endsWith('pack_icon.png'));
