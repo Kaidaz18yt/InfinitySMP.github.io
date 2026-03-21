@@ -10,21 +10,18 @@
             name="description"
             content="Tools for editing Minecraft Bedrock and Education Edition addons. Edit pack names, authors, icons, and combine .mcpacks easily." />
 
-        <!-- Favicons (CRITICAL) -->
         <link rel="icon" href="/logo.png" />
         <link rel="icon" type="image/png" sizes="48x48" href="/logo.png" />
         <link rel="apple-touch-icon" href="/logo.png" />
 
-        <!-- Open Graph (Discord / social only) -->
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://infinitysmp.github.io/" />
         <meta property="og:title" content="Infinity | Home" />
         <meta
             property="og:description"
-            content="Apply for staff, join Discord, check uptime status, and manage Bedrock addons." />
+            content="Look at upcomming events and Opt Out of them, join Discord, check uptime status, and manage Bedrock addons." />
         <meta property="og:image" content="https://infinitysmp.github.io/logo.png" />
 
-        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -36,21 +33,17 @@
                 padding: 0;
                 box-sizing: border-box;
             }
-
             html {
                 overflow-x: hidden;
                 overflow-y: auto;
             }
-
             body {
                 overflow-x: hidden;
             }
-
             body::-webkit-scrollbar,
             html::-webkit-scrollbar {
                 display: none;
             }
-
             body,
             html {
                 -ms-overflow-style: none;
@@ -140,6 +133,16 @@
                     transform: translateY(0);
                 }
             }
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
 
             .header {
                 text-align: center;
@@ -165,7 +168,6 @@
                 border: 2px solid var(--border);
                 transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             }
-
             .logo:hover {
                 transform: scale(1.05) translateY(-5px);
                 box-shadow:
@@ -173,7 +175,6 @@
                     var(--shadow-lg);
                 border-color: var(--accent);
             }
-
             .logo img {
                 width: 100%;
                 height: 100%;
@@ -200,17 +201,6 @@
                 margin: 0 auto;
                 line-height: 1.6;
                 animation: fadeIn 0.6s ease-out 0.3s backwards;
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                    transform: translateY(10px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
             }
 
             .cards-grid {
@@ -248,7 +238,6 @@
                 transform-origin: left;
                 transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             }
-
             .card:hover::before {
                 transform: scaleX(1);
             }
@@ -269,13 +258,11 @@
                 transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
                 pointer-events: none;
             }
-
             .card:hover {
                 transform: translateY(-8px);
                 box-shadow: var(--shadow-lg), var(--shadow-glow);
                 border-color: var(--border-hover);
             }
-
             .card:hover::after {
                 opacity: 0.5;
             }
@@ -283,15 +270,12 @@
             .card:nth-child(1) {
                 animation: fadeInUp 0.6s ease-out 0.4s backwards;
             }
-
             .card:nth-child(2) {
                 animation: fadeInUp 0.6s ease-out 0.5s backwards;
             }
-
             .card:nth-child(3) {
                 animation: fadeInUp 0.6s ease-out 0.6s backwards;
             }
-
             .card:nth-child(4) {
                 animation: fadeInUp 0.6s ease-out 0.7s backwards;
             }
@@ -309,23 +293,21 @@
                 box-shadow: 0 4px 16px rgba(33, 150, 243, 0.3);
                 transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             }
-
             .card:hover .card-icon {
                 transform: scale(1.1) rotate(5deg);
                 box-shadow: 0 8px 24px rgba(33, 150, 243, 0.5);
             }
 
+            /* Image icon — mirrors index behaviour exactly */
             .card-icon-image {
                 padding: 0;
                 overflow: hidden;
                 background: none;
                 box-shadow: none;
             }
-
             .card:hover .card-icon-image {
                 box-shadow: none;
             }
-
             .card-icon-image img {
                 width: 100%;
                 height: 100%;
@@ -339,14 +321,12 @@
                 margin-bottom: 12px;
                 letter-spacing: -0.01em;
             }
-
             .card-description {
                 font-size: 16px;
                 color: var(--text-secondary);
                 line-height: 1.6;
                 margin-bottom: 24px;
             }
-
             .card-link {
                 display: inline-flex;
                 align-items: center;
@@ -356,16 +336,13 @@
                 color: var(--accent);
                 transition: gap 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             }
-
             .card:hover .card-link {
                 gap: 12px;
             }
-
             .arrow {
                 display: inline-block;
                 transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             }
-
             .card:hover .arrow {
                 transform: translateX(4px);
             }
@@ -377,19 +354,16 @@
                 border-top: 1px solid var(--border);
                 animation: fadeIn 0.6s ease-out 0.8s backwards;
             }
-
             .footer-text {
                 font-size: 14px;
                 color: var(--text-tertiary);
                 line-height: 1.6;
             }
-
             .footer-text a {
                 color: var(--accent);
                 text-decoration: none;
                 transition: color 0.2s ease;
             }
-
             .footer-text a:hover {
                 color: var(--accent-hover);
                 text-decoration: underline;
@@ -399,24 +373,19 @@
                 body {
                     padding: 32px 16px;
                 }
-
                 h1 {
                     font-size: 40px;
                 }
-
                 .subtitle {
                     font-size: 18px;
                 }
-
                 .cards-grid {
                     grid-template-columns: 1fr;
                     gap: 20px;
                 }
-
                 .card {
                     padding: 32px;
                 }
-
                 .logo {
                     width: 80px;
                     height: 80px;
@@ -433,7 +402,6 @@
                 z-index: 0;
                 overflow: hidden;
             }
-
             .particle {
                 position: absolute;
                 width: 3px;
@@ -444,7 +412,6 @@
                 animation: float-particle 15s infinite;
                 box-shadow: 0 0 10px var(--accent);
             }
-
             @keyframes float-particle {
                 0% {
                     transform: translateY(100vh) translateX(0);
@@ -461,7 +428,6 @@
                     opacity: 0;
                 }
             }
-
             .particle:nth-child(1) {
                 left: 10%;
                 animation-delay: 0s;
@@ -512,45 +478,49 @@
             </div>
 
             <div class="cards-grid">
+                <!-- Discord -->
                 <a href="https://discord.gg/3FbYYN4cQS" class="card">
                     <div class="card-icon card-icon-image">
                         <img
                             src="https://static.vecteezy.com/system/resources/previews/006/892/625/non_2x/discord-logo-icon-editorial-free-vector.jpg"
-                            alt="Community" />
+                            alt="Discord" />
                     </div>
                     <h2 class="card-title">Discord Server</h2>
                     <p class="card-description">
                         Hang out with our members! Get perks and giveaways, and have fun in public voicechat channels
                         and text channels!
                     </p>
-                    <span class="card-link"> Join community (11/10 agree with us)<span class="arrow">→</span> </span>
+                    <span class="card-link">Join community (11/10 agree with us)<span class="arrow">→</span></span>
                 </a>
+
+                <!-- Tools -->
                 <a href="https://infinitysmp.github.io/tools/" class="card">
                     <div class="card-icon card-icon-image">
-                        <img src="https://infinitysmp.github.io/addon.png" alt="Community" />
+                        <img src="https://infinitysmp.github.io/addon.png" alt="Tools" />
                     </div>
                     <h2 class="card-title">Tools</h2>
                     <p class="card-description">Find a variety of very helpful tools for your SMP!</p>
-                    <span class="card-link"><span class="arrow">Edit now! →</span> </span>
+                    <span class="card-link"><span class="arrow">Edit now! →</span></span>
                 </a>
 
-                <a href="https://www.reddit.com/r/InfinitySmpEdu/" class="card">
-                    <div class="card-icon card-icon-image">
-                        <img
-                            src="https://cdn.brandfetch.io/idkKwm0IT0/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1768324678544"
-                            alt="Community" />
-                    </div>
-                    <h2 class="card-title">Reddit</h2>
-                    <p class="card-description">Join our public reddit to look at updates and changelog features!</p>
-                    <span class="card-link"> Join reddit community<span class="arrow">→</span> </span>
+                <a href="https://infinitysmp.github.io/events" class="card">
+                    <div class="card-icon">✨</div>
+                    <h2 class="card-title">Events</h2>
+                    <p class="card-description">
+                        Look at all the events hosted by our staff or by other people! Open a Ticket in our discord
+                        server to ask to host an event!
+                    </p>
+                    <span class="card-link">See now! <span class="arrow">→</span></span>
                 </a>
+
+                <!-- Status -->
                 <a href="https://infinitysmp.github.io/status/" class="card">
                     <div class="card-icon card-icon-image">
-                        <img src="https://infinitysmp.github.io/status.png" alt="Community" />
+                        <img src="https://infinitysmp.github.io/status.png" alt="Status" />
                     </div>
                     <h2 class="card-title">Status Page</h2>
                     <p class="card-description">View the uptime and status of the SMP, server computer and more!</p>
-                    <span class="card-link"> Check Now!<span class="arrow">→</span> </span>
+                    <span class="card-link">Check Now! <span class="arrow">→</span></span>
                 </a>
             </div>
         </div>
