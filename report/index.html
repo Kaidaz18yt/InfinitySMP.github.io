@@ -1,893 +1,838 @@
 <!doctype html>
 <html lang="en-AU">
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Infinity | Report</title>
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Infinity SMP — World Issue Tracker" />
-    <meta property="og:image" content="https://infinitysmp.github.io/recall-images/eventhunt.png" />
-    <link rel="icon" type="image/png" href="https://infinitysmp.github.io/recall-images/logo.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        html { overflow-x:hidden; overflow-y:auto; }
-        body::-webkit-scrollbar, html::-webkit-scrollbar { display:none; }
-        body, html { -ms-overflow-style:none; scrollbar-width:none; }
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Infinity | Report</title>
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Infinity SMP — World Issue Tracker" />
+        <meta property="og:image" content="https://infinitysmp.github.io/recall-images/eventhunt.png" />
+        <link rel="icon" type="image/png" href="https://infinitysmp.github.io/recall-images/logo.png" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            html { overflow-x: hidden; overflow-y: auto; }
+            body::-webkit-scrollbar, html::-webkit-scrollbar { display: none; }
+            body, html { -ms-overflow-style: none; scrollbar-width: none; }
 
-        :root {
-            --bg-primary:#0a1929; --bg-secondary:#0d2137; --bg-tertiary:#132f4c;
-            --text-primary:#e3f2fd; --text-secondary:#90caf9; --text-tertiary:#64b5f6;
-            --accent:#2196f3; --accent-hover:#42a5f5;
-            --border:rgba(33,150,243,0.15); --border-hover:rgba(33,150,243,0.3);
-            --shadow-md:0 4px 20px rgba(33,150,243,0.15);
-            --shadow-lg:0 12px 48px rgba(33,150,243,0.25);
-            --shadow-glow:0 0 40px rgba(33,150,243,0.2);
-            --radius-sm:10px; --radius-md:14px; --radius-lg:20px;
-            --green:#4caf50; --orange:#ff9800; --red:#f44336;
-        }
-
-        body { font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif; background:var(--bg-primary); color:var(--text-primary); min-height:100vh; padding:40px 20px; line-height:1.5; -webkit-font-smoothing:antialiased; position:relative; max-width:100vw; }
-        body::before { content:""; position:fixed; top:-50%; left:-50%; width:200%; height:200%; background:radial-gradient(circle at 30% 50%,rgba(33,150,243,0.1) 0%,transparent 50%),radial-gradient(circle at 70% 50%,rgba(33,150,243,0.05) 0%,transparent 50%); animation:floatBg 20s ease-in-out infinite; pointer-events:none; }
-
-        @keyframes floatBg  { 0%,100%{transform:translate(0,0) rotate(0deg)} 33%{transform:translate(30px,-30px) rotate(5deg)} 66%{transform:translate(-20px,20px) rotate(-5deg)} }
-        @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes fadeIn   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes spin     { to{transform:rotate(360deg)} }
-        @keyframes slideIn  { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
-        @keyframes shake    { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-7px)} 40%{transform:translateX(7px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
-
-        .container { width:100%; max-width:960px; margin:0 auto; animation:fadeInUp 0.8s cubic-bezier(0.16,1,0.3,1); position:relative; z-index:1; }
-
-        .header { text-align:center; margin-bottom:40px; }
-        .logo-container { margin-bottom:28px; }
-        .logo { width:96px; height:96px; margin:0 auto; border-radius:24px; display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow:var(--shadow-glow),var(--shadow-lg); background:var(--bg-secondary); border:2px solid var(--border); transition:all 0.4s cubic-bezier(0.16,1,0.3,1); text-decoration:none; }
-        .logo:hover { transform:scale(1.05) translateY(-5px); border-color:var(--accent); }
-        .logo img { width:100%; height:100%; object-fit:cover; }
-        .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--text-secondary); text-decoration:none; font-size:14px; margin-bottom:20px; transition:all 0.3s ease; font-weight:500; }
-        .back-link:hover { color:var(--accent); }
-        h1 { font-size:48px; font-weight:700; letter-spacing:-0.03em; margin-bottom:12px; background:linear-gradient(135deg,var(--text-primary) 0%,var(--accent) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-        .header-subtitle { font-size:16px; color:var(--text-secondary); }
-
-        /* ── Username bar ── */
-        .username-bar { display:flex; align-items:center; justify-content:center; margin-bottom:24px; }
-        .username-bar-inner { display:inline-flex; align-items:center; gap:10px; background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-md); padding:9px 16px; transition:border-color 0.3s; }
-        .username-bar-inner:focus-within { border-color:var(--accent); }
-        .ubar-avatar { width:26px; height:26px; border-radius:7px; overflow:hidden; background:var(--bg-tertiary); border:1px solid var(--border); flex-shrink:0; }
-        .ubar-avatar img { width:100%; height:100%; object-fit:cover; }
-        .ubar-label { font-size:13px; color:var(--text-tertiary); font-family:"JetBrains Mono",monospace; white-space:nowrap; }
-        .ubar-name  { font-size:13px; font-weight:700; color:var(--text-primary); font-family:"JetBrains Mono",monospace; max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-        .ubar-change { background:none; border:none; color:var(--text-tertiary); font-size:12px; cursor:pointer; font-family:inherit; transition:color 0.2s; padding:2px 6px; border-radius:6px; white-space:nowrap; }
-        .ubar-change:hover { color:var(--accent); background:rgba(33,150,243,0.08); }
-        .ubar-input { background:transparent; border:none; color:var(--text-primary); font-size:13px; font-family:"JetBrains Mono",monospace; outline:none; width:170px; }
-        .ubar-input::placeholder { color:rgba(100,181,246,0.4); }
-        .ubar-input.shake { animation:shake 0.35s ease; }
-        .ubar-save { background:linear-gradient(135deg,var(--accent),var(--accent-hover)); color:white; border:none; padding:5px 12px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
-        .ubar-save:hover { transform:translateY(-1px); }
-
-        /* ── Stats ── */
-        .stats-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
-        .stat-card { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-md); padding:20px; text-align:center; transition:all 0.3s ease; cursor:default; }
-        .stat-card:hover { border-color:var(--border-hover); transform:translateY(-2px); box-shadow:var(--shadow-md); }
-        .stat-value { font-size:30px; font-weight:700; color:var(--text-primary); font-family:"JetBrains Mono",monospace; }
-        .stat-label { font-size:11px; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:0.08em; font-weight:600; margin-top:4px; }
-        .stat-card.s-issue .stat-value  { color:var(--red); }
-        .stat-card.s-known .stat-value  { color:var(--orange); }
-        .stat-card.s-fixing .stat-value { color:var(--accent); }
-        .stat-card.s-fixed .stat-value  { color:var(--green); }
-
-        /* ── Controls ── */
-        .controls { display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap; align-items:center; }
-        .search-input { flex:1; min-width:220px; background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 14px; color:var(--text-primary); font-size:14px; font-family:inherit; outline:none; transition:all 0.3s ease; }
-        .search-input::placeholder { color:rgba(100,181,246,0.35); }
-        .search-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(33,150,243,0.12); }
-        .report-btn { background:linear-gradient(135deg,var(--red),#ef5350); color:white; border:none; padding:10px 22px; border-radius:var(--radius-sm); font-size:14px; font-weight:600; cursor:pointer; transition:all 0.3s ease; box-shadow:0 4px 14px rgba(244,67,54,0.35); display:flex; align-items:center; gap:8px; white-space:nowrap; }
-        .report-btn:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(244,67,54,0.45); }
-
-        .filter-chips { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; }
-        .filter-chip { padding:6px 16px; border-radius:20px; background:var(--bg-secondary); border:1px solid var(--border); color:var(--text-secondary); font-size:13px; font-weight:600; cursor:pointer; transition:all 0.2s ease; white-space:nowrap; display:flex; align-items:center; gap:6px; }
-        .filter-chip:hover { border-color:var(--border-hover); color:var(--text-primary); }
-        .filter-chip.active                { background:rgba(33,150,243,0.12); border-color:var(--accent); color:var(--accent); }
-        .filter-chip.active.chip-issue  { background:rgba(244,67,54,0.1);  border-color:rgba(244,67,54,0.4);  color:var(--red); }
-        .filter-chip.active.chip-known  { background:rgba(255,152,0,0.1);  border-color:rgba(255,152,0,0.4);  color:var(--orange); }
-        .filter-chip.active.chip-fixing { background:rgba(33,150,243,0.1); border-color:rgba(33,150,243,0.4); color:var(--accent); }
-        .filter-chip.active.chip-fixed  { background:rgba(76,175,80,0.1);  border-color:rgba(76,175,80,0.4);  color:var(--green); }
-        .chip-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-        .chip-dot.issue  { background:var(--red); }
-        .chip-dot.known  { background:var(--orange); }
-        .chip-dot.fixing { background:var(--accent); animation:pulseDot 1.8s ease-in-out infinite; }
-        .chip-dot.fixed  { background:var(--green); }
-
-        /* ── Issue Cards ── */
-        .issues-list { display:grid; gap:14px; }
-        .issue-card { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-lg); padding:22px 24px; cursor:pointer; transition:all 0.35s cubic-bezier(0.16,1,0.3,1); position:relative; overflow:hidden; animation:slideIn 0.35s ease-out backwards; }
-        .issue-card::before { content:""; position:absolute; top:0; left:0; bottom:0; width:4px; }
-        .issue-card.status-issue::before  { background:var(--red); }
-        .issue-card.status-known::before  { background:var(--orange); }
-        .issue-card.status-fixing::before { background:var(--accent); }
-        .issue-card.status-fixed::before  { background:var(--green); }
-        .issue-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); border-color:var(--border-hover); }
-        .issue-card-top { display:flex; align-items:flex-start; gap:14px; margin-bottom:10px; }
-        .issue-card-info { flex:1; min-width:0; }
-        .issue-card-title { font-size:16px; font-weight:600; color:var(--text-primary); margin-bottom:4px; line-height:1.4; }
-        .issue-card-desc  { font-size:13px; color:var(--text-secondary); overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; line-height:1.5; }
-        .issue-card-badges { display:flex; align-items:center; gap:8px; flex-shrink:0; flex-wrap:wrap; justify-content:flex-end; }
-        .status-badge { display:inline-flex; align-items:center; gap:5px; padding:4px 11px; border-radius:20px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; white-space:nowrap; }
-        .status-badge.issue  { background:rgba(244,67,54,0.12);  border:1px solid rgba(244,67,54,0.3);  color:var(--red); }
-        .status-badge.known  { background:rgba(255,152,0,0.12);  border:1px solid rgba(255,152,0,0.3);  color:var(--orange); }
-        .status-badge.fixing { background:rgba(33,150,243,0.12); border:1px solid rgba(33,150,243,0.3); color:var(--accent); }
-        .status-badge.fixed  { background:rgba(76,175,80,0.12);  border:1px solid rgba(76,175,80,0.3);  color:var(--green); }
-        .has-video-badge { display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border-radius:20px; background:rgba(156,39,176,0.12); border:1px solid rgba(156,39,176,0.3); color:#ce93d8; font-size:12px; font-weight:600; white-space:nowrap; }
-        .mine-badge { display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border-radius:20px; background:rgba(33,150,243,0.1); border:1px solid rgba(33,150,243,0.25); color:var(--text-tertiary); font-size:11px; font-weight:600; white-space:nowrap; }
-        .issue-card-footer { display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:12px; color:var(--text-tertiary); font-family:"JetBrains Mono",monospace; flex-wrap:wrap; }
-        .card-footer-left { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
-        .meta-item { display:flex; align-items:center; gap:4px; }
-        .meta-sep  { opacity:0.3; }
-        .same-count    { color:var(--orange); font-weight:600; }
-        .card-delete-btn { background:none; border:1px solid transparent; color:rgba(244,67,54,0.4); font-size:12px; cursor:pointer; padding:5px 10px; border-radius:var(--radius-sm); transition:all 0.2s; display:flex; align-items:center; gap:4px; white-space:nowrap; }
-        .card-delete-btn:hover { color:var(--red); background:rgba(244,67,54,0.1); border-color:rgba(244,67,54,0.3); }
-
-        /* ── Empty / Loading ── */
-        .empty-state { text-align:center; padding:70px 20px; background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-lg); }
-        .empty-icon  { font-size:52px; margin-bottom:14px; }
-        .empty-title { font-size:20px; font-weight:600; color:var(--text-primary); margin-bottom:8px; }
-        .empty-sub   { font-size:14px; color:var(--text-secondary); }
-        .loading-state { text-align:center; padding:60px; color:var(--text-secondary); }
-        .loading-spinner { width:36px; height:36px; border:3px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px; }
-
-        /* ── Modals ── */
-        .modal-overlay { position:fixed; inset:0; background:rgba(10,25,41,0.88); backdrop-filter:blur(6px); z-index:150; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity 0.3s ease; overflow-y:auto; }
-        .modal-overlay.visible { opacity:1; pointer-events:all; }
-
-        /* Submit */
-        .submit-modal { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-lg); padding:36px; max-width:560px; width:100%; box-shadow:var(--shadow-lg); position:relative; overflow:hidden; transform:scale(0.95) translateY(20px); transition:all 0.35s cubic-bezier(0.16,1,0.3,1); max-height:90vh; overflow-y:auto; }
-        .modal-overlay.visible .submit-modal { transform:scale(1) translateY(0); }
-        .submit-modal::before { content:""; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--red),#ef5350); }
-        .modal-close { position:absolute; top:16px; right:16px; background:none; border:none; color:var(--text-tertiary); font-size:20px; cursor:pointer; width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
-        .modal-close:hover { color:var(--text-primary); background:var(--bg-tertiary); }
-        .modal-title { font-size:22px; font-weight:700; color:var(--text-primary); margin-bottom:6px; }
-        .modal-sub   { font-size:14px; color:var(--text-secondary); margin-bottom:28px; }
-        .form-grid { display:grid; gap:18px; }
-        .form-field label { display:block; font-size:12px; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:7px; font-family:"JetBrains Mono",monospace; }
-        .form-field input, .form-field textarea { width:100%; background:var(--bg-primary); border:1px solid var(--border); border-radius:var(--radius-sm); padding:11px 14px; color:var(--text-primary); font-size:14px; font-family:inherit; outline:none; transition:all 0.3s ease; resize:none; }
-        .form-field input::placeholder, .form-field textarea::placeholder { color:rgba(100,181,246,0.35); }
-        .form-field input:focus, .form-field textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(33,150,243,0.12); background:var(--bg-secondary); }
-        .char-hint { font-size:11px; color:var(--text-tertiary); margin-top:5px; text-align:right; font-family:"JetBrains Mono",monospace; }
-
-        /* Locked-user hint in submit modal */
-        .locked-user-hint { display:flex; align-items:center; gap:10px; padding:10px 14px; background:rgba(33,150,243,0.06); border:1px solid var(--border); border-radius:var(--radius-sm); }
-        .locked-user-av   { width:28px; height:28px; border-radius:8px; overflow:hidden; background:var(--bg-tertiary); border:1px solid var(--border); flex-shrink:0; }
-        .locked-user-av img { width:100%; height:100%; object-fit:cover; }
-        .locked-user-name { font-size:13px; font-weight:700; color:var(--text-primary); font-family:"JetBrains Mono",monospace; flex:1; }
-        .locked-user-change { background:none; border:none; color:var(--accent); font-size:12px; cursor:pointer; font-family:inherit; transition:opacity 0.2s; }
-        .locked-user-change:hover { opacity:0.7; }
-
-        /* Video upload */
-        .video-upload-area { border:2px dashed var(--border); border-radius:var(--radius-md); padding:28px 20px; text-align:center; transition:all 0.3s ease; cursor:pointer; position:relative; }
-        .video-upload-area:hover { border-color:var(--accent); background:rgba(33,150,243,0.04); }
-        .video-upload-area.dragging { border-color:var(--accent); background:rgba(33,150,243,0.08); }
-        .video-upload-area.has-file { border-color:rgba(156,39,176,0.4); background:rgba(156,39,176,0.05); border-style:solid; }
-        .upload-icon  { font-size:32px; margin-bottom:10px; }
-        .upload-label { font-size:14px; color:var(--text-secondary); margin-bottom:4px; }
-        .upload-hint  { font-size:12px; color:var(--text-tertiary); }
-        .upload-file-input { position:absolute; inset:0; opacity:0; cursor:pointer; }
-        .upload-progress-wrap { margin-top:12px; display:none; }
-        .upload-progress-wrap.visible { display:block; }
-        .upload-progress-bar-track { height:6px; background:var(--bg-tertiary); border-radius:3px; overflow:hidden; }
-        .upload-progress-bar-fill  { height:100%; background:linear-gradient(90deg,#9c27b0,#ce93d8); border-radius:3px; transition:width 0.2s; width:0%; }
-        .upload-progress-text { font-size:12px; color:var(--text-tertiary); margin-top:6px; font-family:"JetBrains Mono",monospace; }
-        .upload-success { align-items:center; gap:10px; padding:12px 14px; background:rgba(156,39,176,0.1); border:1px solid rgba(156,39,176,0.3); border-radius:var(--radius-sm); margin-top:10px; display:none; }
-        .upload-success.visible { display:flex; }
-        .upload-success-text { flex:1; font-size:13px; color:#ce93d8; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-        .upload-clear-btn { background:none; border:none; color:rgba(244,67,54,0.5); cursor:pointer; font-size:14px; padding:2px; transition:color 0.2s; }
-        .upload-clear-btn:hover { color:var(--red); }
-        .submit-btn { width:100%; background:linear-gradient(135deg,var(--red),#ef5350); color:white; border:none; padding:14px 28px; border-radius:var(--radius-md); font-size:15px; font-weight:600; cursor:pointer; transition:all 0.3s ease; box-shadow:0 4px 14px rgba(244,67,54,0.3); margin-top:4px; display:flex; align-items:center; justify-content:center; gap:8px; }
-        .submit-btn:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(244,67,54,0.4); }
-        .submit-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
-
-        /* Detail modal */
-        .detail-modal { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-lg); max-width:680px; width:100%; box-shadow:var(--shadow-lg); position:relative; overflow:hidden; transform:scale(0.95) translateY(20px); transition:all 0.35s cubic-bezier(0.16,1,0.3,1); max-height:90vh; display:flex; flex-direction:column; }
-        .modal-overlay.visible .detail-modal { transform:scale(1) translateY(0); }
-        .detail-modal-header { padding:28px 28px 20px; border-bottom:1px solid var(--border); position:relative; flex-shrink:0; }
-        .detail-modal-header::before { content:""; position:absolute; top:0; left:0; right:0; height:3px; }
-        .detail-modal-header.status-issue::before  { background:var(--red); }
-        .detail-modal-header.status-known::before  { background:var(--orange); }
-        .detail-modal-header.status-fixing::before { background:var(--accent); }
-        .detail-modal-header.status-fixed::before  { background:var(--green); }
-        .detail-modal-body { overflow-y:auto; flex:1; padding:24px 28px; }
-        .detail-title { font-size:20px; font-weight:700; color:var(--text-primary); margin-bottom:10px; padding-right:40px; line-height:1.4; }
-        .detail-meta { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
-        .detail-meta-item { font-size:12px; color:var(--text-tertiary); font-family:"JetBrains Mono",monospace; }
-        .detail-delete-btn { display:inline-flex; align-items:center; gap:5px; padding:5px 12px; border-radius:var(--radius-sm); background:rgba(244,67,54,0.08); border:1px solid rgba(244,67,54,0.25); color:rgba(244,67,54,0.65); font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s; }
-        .detail-delete-btn:hover { background:rgba(244,67,54,0.15); border-color:rgba(244,67,54,0.5); color:var(--red); }
-        .detail-desc { font-size:14px; color:var(--text-secondary); line-height:1.7; padding:14px 16px; background:var(--bg-primary); border-radius:var(--radius-sm); border-left:3px solid var(--border); margin-bottom:20px; white-space:pre-wrap; }
-        .detail-video { margin-bottom:20px; }
-        .detail-video video { width:100%; border-radius:var(--radius-md); border:1px solid rgba(156,39,176,0.3); background:#000; max-height:300px; }
-        .detail-video-label { font-size:12px; color:#ce93d8; font-family:"JetBrains Mono",monospace; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
-        .same-issue-section { display:flex; align-items:center; gap:16px; padding:16px 18px; background:var(--bg-primary); border-radius:var(--radius-md); border:1px solid var(--border); margin-bottom:20px; }
-        .same-issue-count-big { font-size:28px; font-weight:700; color:var(--orange); font-family:"JetBrains Mono",monospace; }
-        .same-issue-label { font-size:13px; color:var(--text-secondary); flex:1; }
-        .same-issue-btn { background:rgba(255,152,0,0.1); border:1px solid rgba(255,152,0,0.35); color:var(--orange); padding:9px 18px; border-radius:var(--radius-sm); font-size:14px; font-weight:600; cursor:pointer; transition:all 0.3s ease; display:flex; align-items:center; gap:6px; white-space:nowrap; }
-        .same-issue-btn:hover { background:rgba(255,152,0,0.18); border-color:rgba(255,152,0,0.5); transform:translateY(-1px); }
-        .same-issue-btn.voted { background:rgba(255,152,0,0.2); border-color:var(--orange); cursor:default; }
-        .same-issue-btn:disabled { opacity:0.6; cursor:default; transform:none; }
-
-        /* Comments */
-        .comments-section-title { font-size:14px; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.06em; font-family:"JetBrains Mono",monospace; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
-        .comment-list { display:grid; gap:10px; margin-bottom:16px; }
-        .comment-item { background:var(--bg-primary); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; animation:slideIn 0.25s ease-out backwards; }
-        .comment-item.is-mine { border-color:rgba(33,150,243,0.22); }
-        .comment-top  { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-        .comment-avatar { width:28px; height:28px; border-radius:8px; overflow:hidden; background:var(--bg-tertiary); border:1px solid var(--border); flex-shrink:0; }
-        .comment-avatar img { width:100%; height:100%; object-fit:cover; }
-        .comment-username { font-size:13px; font-weight:600; color:var(--text-primary); font-family:"JetBrains Mono",monospace; }
-        .comment-mine-tag { font-size:10px; color:var(--accent); background:rgba(33,150,243,0.1); border:1px solid rgba(33,150,243,0.2); padding:1px 7px; border-radius:10px; font-weight:600; }
-        .comment-date { font-size:11px; color:var(--text-tertiary); margin-left:auto; }
-        .comment-text { font-size:13px; color:var(--text-secondary); line-height:1.6; }
-        .comment-actions { display:flex; align-items:center; justify-content:flex-end; margin-top:8px; }
-        .comment-delete-btn { background:none; border:none; color:rgba(244,67,54,0.35); font-size:12px; cursor:pointer; padding:3px 8px; border-radius:6px; transition:all 0.2s; display:flex; align-items:center; gap:4px; }
-        .comment-delete-btn:hover { color:var(--red); background:rgba(244,67,54,0.1); }
-        .comment-form { display:grid; gap:10px; padding-top:14px; border-top:1px solid var(--border); }
-        .posting-as   { font-size:12px; color:var(--text-tertiary); font-family:"JetBrains Mono",monospace; }
-        .posting-as strong { color:var(--text-secondary); }
-        .posting-as button { background:none; border:none; color:var(--accent); font-size:12px; cursor:pointer; font-family:inherit; transition:opacity 0.2s; }
-        .posting-as button:hover { opacity:0.7; }
-        .comment-input { background:var(--bg-primary); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 14px; color:var(--text-primary); font-size:13px; font-family:inherit; outline:none; transition:all 0.3s ease; resize:none; min-height:72px; }
-        .comment-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(33,150,243,0.12); background:var(--bg-secondary); }
-        .comment-submit-btn { background:linear-gradient(135deg,var(--accent),var(--accent-hover)); color:white; border:none; padding:10px 18px; border-radius:var(--radius-sm); font-size:13px; font-weight:600; cursor:pointer; transition:all 0.3s ease; }
-        .comment-submit-btn:hover { transform:translateY(-1px); }
-        .no-comments   { font-size:13px; color:var(--text-tertiary); text-align:center; padding:16px; font-style:italic; }
-        .no-user-hint  { font-size:13px; color:var(--orange); text-align:center; padding:10px 14px; background:rgba(255,152,0,0.07); border:1px solid rgba(255,152,0,0.2); border-radius:var(--radius-sm); }
-
-        /* Generic confirm modal */
-        .confirm-modal { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-lg); padding:36px; max-width:400px; width:100%; box-shadow:var(--shadow-lg); text-align:center; transform:scale(0.95); transition:transform 0.3s cubic-bezier(0.16,1,0.3,1); }
-        .modal-overlay.visible .confirm-modal { transform:scale(1); }
-        .confirm-icon  { font-size:38px; margin-bottom:14px; }
-        .confirm-title { font-size:19px; font-weight:700; color:var(--text-primary); margin-bottom:8px; }
-        .confirm-sub   { font-size:14px; color:var(--text-secondary); margin-bottom:24px; line-height:1.6; }
-        .confirm-name-field { background:var(--bg-primary); border:1px solid var(--border); border-radius:var(--radius-sm); padding:11px 14px; color:var(--text-primary); font-size:14px; font-family:"JetBrains Mono",monospace; outline:none; transition:all 0.3s ease; width:100%; margin-bottom:20px; text-align:center; letter-spacing:0.05em; }
-        .confirm-name-field::placeholder { color:rgba(100,181,246,0.35); letter-spacing:0; font-family:inherit; }
-        .confirm-name-field:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(33,150,243,0.12); }
-        .confirm-btns { display:flex; gap:10px; }
-        .confirm-cancel { flex:1; background:var(--bg-tertiary); border:1px solid var(--border); color:var(--text-secondary); padding:11px; border-radius:var(--radius-sm); font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; }
-        .confirm-cancel:hover { color:var(--text-primary); border-color:var(--border-hover); }
-        .btn-orange { flex:1; background:rgba(255,152,0,0.15); border:1px solid rgba(255,152,0,0.4); color:var(--orange); padding:11px; border-radius:var(--radius-sm); font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; }
-        .btn-orange:hover { background:rgba(255,152,0,0.25); }
-        .btn-red    { flex:1; background:rgba(244,67,54,0.15); border:1px solid rgba(244,67,54,0.4); color:var(--red); padding:11px; border-radius:var(--radius-sm); font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; }
-        .btn-red:hover { background:rgba(244,67,54,0.25); }
-
-        /* Toast */
-        .toast { position:fixed; bottom:32px; left:50%; transform:translateX(-50%) translateY(100px); background:var(--bg-tertiary); border:1px solid rgba(76,175,80,0.4); border-radius:var(--radius-md); padding:14px 22px; display:flex; align-items:center; gap:10px; font-size:14px; font-weight:500; color:var(--text-primary); box-shadow:var(--shadow-lg); z-index:300; transition:transform 0.5s cubic-bezier(0.16,1,0.3,1); white-space:nowrap; }
-        .toast.show  { transform:translateX(-50%) translateY(0); }
-        .toast.error { border-color:rgba(244,67,54,0.4); }
-
-        .particles { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
-        .particle { position:absolute; width:3px; height:3px; background:var(--accent); border-radius:50%; opacity:0; animation:float-particle 15s infinite; box-shadow:0 0 10px var(--accent); }
-        @keyframes float-particle { 0%{transform:translateY(100vh) translateX(0);opacity:0} 10%{opacity:0.5} 90%{opacity:0.5} 100%{transform:translateY(-100px) translateX(100px);opacity:0} }
-        .particle:nth-child(1){left:10%;animation-delay:0s}.particle:nth-child(2){left:25%;animation-delay:3s}.particle:nth-child(3){left:40%;animation-delay:6s}.particle:nth-child(4){left:60%;animation-delay:9s}.particle:nth-child(5){left:75%;animation-delay:12s}.particle:nth-child(6){left:90%;animation-delay:2s}
-
-        .footer { text-align:center; margin-top:60px; padding-top:32px; border-top:1px solid var(--border); }
-        .footer-text { font-size:14px; color:var(--text-tertiary); line-height:1.6; }
-        .footer-text a { color:var(--accent); text-decoration:none; }
-        .admin-footer-link { color:rgba(100,181,246,0.3) !important; font-size:12px; }
-        .admin-footer-link:hover { color:var(--accent) !important; }
-
-        @media(max-width:768px){
-            body{padding:28px 14px;} h1{font-size:32px;} .logo{width:80px;height:80px;}
-            .stats-bar{grid-template-columns:1fr 1fr;}
-            .detail-modal-body,.detail-modal-header{padding:18px;} .submit-modal{padding:24px;}
-        }
-    </style>
-</head>
-<body>
-    <div class="particles"><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div></div>
-
-    <!-- Submit Issue Modal -->
-    <div class="modal-overlay" id="submitModal">
-        <div class="submit-modal">
-            <button class="modal-close" onclick="closeModal('submitModal')">✕</button>
-            <div class="modal-title">🐛 Report a World Issue</div>
-            <div class="modal-sub">Found something broken? Let us know and the community can confirm it.</div>
-            <div class="form-grid">
-                <div id="submitUserFieldWrap"></div>
-                <div class="form-field">
-                    <label for="submitTitle">Issue Title *</label>
-                    <input type="text" id="submitTitle" placeholder="Chunk not loading near spawn" maxlength="100"
-                        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-                </div>
-                <div class="form-field">
-                    <label for="submitDesc">Description *</label>
-                    <textarea id="submitDesc" rows="5" placeholder="Describe the issue in detail — where it happens, steps to reproduce..."
-                        autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
-                    <div class="char-hint" id="descCharHint">0 / 1000</div>
-                </div>
-                <div class="form-field">
-                    <label>Video Evidence <span style="text-transform:none;font-weight:400;color:var(--text-tertiary)">(optional)</span></label>
-                    <div class="video-upload-area" id="uploadArea" onclick="document.getElementById('videoFileInput').click()">
-                        <input type="file" id="videoFileInput" class="upload-file-input" accept="video/*" onchange="handleVideoSelect(event)" onclick="event.stopPropagation()" />
-                        <div id="uploadDefault">
-                            <div class="upload-icon">🎥</div>
-                            <div class="upload-label">Click or drag to upload a video</div>
-                            <div class="upload-hint">MP4, MOV, WebM — up to 100MB</div>
-                        </div>
-                        <div class="upload-progress-wrap" id="uploadProgressWrap">
-                            <div class="upload-progress-bar-track"><div class="upload-progress-bar-fill" id="uploadProgressFill"></div></div>
-                            <div class="upload-progress-text" id="uploadProgressText">Uploading… 0%</div>
-                        </div>
-                    </div>
-                    <div class="upload-success" id="uploadSuccess">
-                        <span>🎬</span>
-                        <span class="upload-success-text" id="uploadSuccessName"></span>
-                        <button class="upload-clear-btn" onclick="clearVideoUpload(event)">✕</button>
-                    </div>
-                </div>
-                <button class="submit-btn" id="submitIssueBtn" onclick="submitIssue()"><span>🚨</span> Submit Issue</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Detail Modal -->
-    <div class="modal-overlay" id="detailModal">
-        <div class="detail-modal">
-            <div class="detail-modal-header" id="detailHeader">
-                <button class="modal-close" onclick="closeModal('detailModal')">✕</button>
-                <div class="detail-title" id="detailTitle"></div>
-                <div class="detail-meta"  id="detailMeta"></div>
-            </div>
-            <div class="detail-modal-body">
-                <div id="detailVideoSection" class="detail-video" style="display:none">
-                    <div class="detail-video-label">🎬 Video Evidence</div>
-                    <video id="detailVideo" controls preload="metadata"></video>
-                </div>
-                <div class="detail-desc" id="detailDesc"></div>
-                <div class="same-issue-section">
-                    <div><div class="same-issue-count-big" id="detailSameCount">0</div><div class="same-issue-label">players have the same issue</div></div>
-                    <button class="same-issue-btn" id="sameIssueBtn" onclick="handleSameIssue()"><span>🙋</span> I have this too</button>
-                </div>
-                <div class="comments-section-title">💬 <span id="commentCountLabel">Comments</span></div>
-                <div class="comment-list" id="commentList"></div>
-                <div id="commentFormWrap"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Same issue confirm -->
-    <div class="modal-overlay" id="sameConfirmModal">
-        <div class="confirm-modal">
-            <div class="confirm-icon">🙋</div>
-            <div class="confirm-title">I have this issue too</div>
-            <div class="confirm-sub" id="sameConfirmSub">Enter your Minecraft username to confirm you've experienced this.</div>
-            <input type="text" class="confirm-name-field" id="sameUsername" placeholder="Your username…" maxlength="30"
-                autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                onkeydown="if(event.key==='Enter') confirmSameIssue()" />
-            <div class="confirm-btns">
-                <button class="confirm-cancel" onclick="closeModal('sameConfirmModal')">Cancel</button>
-                <button class="btn-orange" onclick="confirmSameIssue()">🙋 Confirm</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete own issue -->
-    <div class="modal-overlay" id="deleteIssueModal">
-        <div class="confirm-modal">
-            <div class="confirm-icon">🗑️</div>
-            <div class="confirm-title">Delete your issue?</div>
-            <div class="confirm-sub">This removes your report and all its comments permanently.</div>
-            <div class="confirm-btns">
-                <button class="confirm-cancel" onclick="closeModal('deleteIssueModal')">Cancel</button>
-                <button class="btn-red" id="deleteIssueConfirmBtn">🗑️ Delete</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete own comment -->
-    <div class="modal-overlay" id="deleteCommentModal">
-        <div class="confirm-modal">
-            <div class="confirm-icon">🗑️</div>
-            <div class="confirm-title">Delete your comment?</div>
-            <div class="confirm-sub">This cannot be undone.</div>
-            <div class="confirm-btns">
-                <button class="confirm-cancel" onclick="closeModal('deleteCommentModal')">Cancel</button>
-                <button class="btn-red" id="deleteCommentConfirmBtn">🗑️ Delete</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="header">
-            <div class="logo-container">
-                <a href="https://infinitysmp.github.io/" class="logo">
-                    <img src="https://infinitysmp.github.io/logo.png" alt="Infinity SMP" />
-                </a>
-            </div>
-            <a href="https://infinitysmp.github.io/" class="back-link">← Back to Home</a>
-            <h1>Issue Tracker</h1>
-            <p class="header-subtitle">Report world issues and help the community track them</p>
-        </div>
-
-        <!-- Username bar -->
-        <div class="username-bar"><div class="username-bar-inner" id="usernameBarInner"></div></div>
-
-        <div class="stats-bar">
-            <div class="stat-card s-issue" ><div class="stat-value" id="statIssue" >—</div><div class="stat-label">🔴 Issue</div></div>
-            <div class="stat-card s-known" ><div class="stat-value" id="statKnown" >—</div><div class="stat-label">🟠 Known</div></div>
-            <div class="stat-card s-fixing"><div class="stat-value" id="statFixing">—</div><div class="stat-label">🔵 Fixing</div></div>
-            <div class="stat-card s-fixed" ><div class="stat-value" id="statFixed" >—</div><div class="stat-label">🟢 Fixed</div></div>
-        </div>
-
-        <div class="controls">
-            <input type="text" class="search-input" id="searchInput" placeholder="🔍  Search issues…"
-                oninput="applyFilters()" autocomplete="off" autocorrect="off" spellcheck="false" />
-            <button class="report-btn" onclick="openSubmitModal()">🚨 Report an Issue</button>
-        </div>
-
-        <div class="filter-chips">
-            <div class="filter-chip active"       data-filter="all"    onclick="setFilter('all')">All</div>
-            <div class="filter-chip chip-issue"   data-filter="issue"  onclick="setFilter('issue')"><span class="chip-dot issue"></span>Issue</div>
-            <div class="filter-chip chip-known"   data-filter="known"  onclick="setFilter('known')"><span class="chip-dot known"></span>Known</div>
-            <div class="filter-chip chip-fixing"  data-filter="fixing" onclick="setFilter('fixing')"><span class="chip-dot fixing"></span>Fixing</div>
-            <div class="filter-chip chip-fixed"   data-filter="fixed"  onclick="setFilter('fixed')"><span class="chip-dot fixed"></span>Fixed</div>
-        </div>
-
-        <div class="issues-list" id="issuesList">
-            <div class="loading-state"><div class="loading-spinner"></div><div>Loading issues…</div></div>
-        </div>
-
-        <div class="footer"><p class="footer-text">Infinity SMP Issue Tracker &nbsp;·&nbsp; <a href="https://discord.gg/3FbYYN4cQS">Discord</a><br/><a href="admin.html" class="admin-footer-link">Admin Panel</a></p></div>
-    </div>
-
-    <div class="toast" id="toast"><span id="toastIcon">✅</span>&nbsp;<span id="toastMsg"></span></div>
-
-    <script type="module">
-        import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, push, onValue, update, remove, serverTimestamp }
-            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-        const FC = {
-            apiKey:"AIzaSyBgV9PoUFut3FPc0iChFNm2-h6-Uc5z6s0",
-            authDomain:"infinity-service-b2f10.firebaseapp.com",
-            databaseURL:"https://infinity-service-b2f10-default-rtdb.firebaseio.com",
-            projectId:"infinity-service-b2f10",
-            storageBucket:"infinity-service-b2f10.firebasestorage.app",
-            messagingSenderId:"805770674259",
-            appId:"1:805770674259:web:bcc520979e6772fda5c6a6"
-        };
-        const app = initializeApp(FC);
-        const db  = getDatabase(app);
-
-        const CLOUD_NAME    = "dgrmpcha9";
-        const UPLOAD_PRESET = "player_reports";
-        const VOTES_KEY     = "infinitySMP_votes_v1";
-        const USER_KEY      = "infinitySMP_username_v2";   // localStorage key
-
-        let allIssues       = [];
-        let activeFilter    = "all";
-        let currentIssueKey = null;
-        let pendingVideoUrl = null;
-        let pendingSameKey  = null;
-        let pendingDeleteIssueFn   = null;
-        let pendingDeleteCommentFn = null;
-        let editingUsername = false;
-
-        /* ─── Username (localStorage) ─── */
-        const getUser  = ()    => localStorage.getItem(USER_KEY) || "";
-        const setUser  = u     => { localStorage.setItem(USER_KEY, u.trim()); renderUsernameBar(); applyFilters(); };
-        const isOwner  = name  => { const u = getUser(); return u && u.trim().toLowerCase() === (name||"").trim().toLowerCase(); };
-
-        function renderUsernameBar() {
-            const bar = document.getElementById("usernameBarInner");
-            const u   = getUser();
-            if (editingUsername || !u) {
-                bar.innerHTML = `
-                    <span style="font-size:14px">👤</span>
-                    <input type="text" class="ubar-input" id="ubarInput"
-                        placeholder="Set your Minecraft username…"
-                        maxlength="30"
-                        autocomplete="off" autocorrect="off" autocapitalize="off"
-                        spellcheck="false" data-form-type="other"
-                        value="${esc(u)}"
-                        onkeydown="if(event.key==='Enter')saveUsername()" />
-                    <button class="ubar-save" onclick="saveUsername()">Save</button>`;
-                setTimeout(() => document.getElementById("ubarInput")?.focus(), 40);
-            } else {
-                bar.innerHTML = `
-                    <div class="ubar-avatar">
-                        <img src="https://mc-heads.net/avatar/${encodeURIComponent(u)}/26"
-                            onerror="this.style.display='none'" />
-                    </div>
-                    <span class="ubar-label">Playing as</span>
-                    <span class="ubar-name">${esc(u)}</span>
-                    <button class="ubar-change" onclick="startEditUsername()">✏️ Change</button>`;
+            :root {
+                --bg-primary: #0a1929;
+                --bg-secondary: #0d2137;
+                --bg-tertiary: #132f4c;
+                --text-primary: #e3f2fd;
+                --text-secondary: #90caf9;
+                --text-tertiary: #64b5f6;
+                --accent: #2196f3;
+                --accent-hover: #42a5f5;
+                --border: rgba(33, 150, 243, 0.15);
+                --border-hover: rgba(33, 150, 243, 0.3);
+                --shadow-md: 0 4px 20px rgba(33, 150, 243, 0.15);
+                --shadow-lg: 0 12px 48px rgba(33, 150, 243, 0.25);
+                --shadow-glow: 0 0 40px rgba(33, 150, 243, 0.2);
+                --radius-sm: 10px;
+                --radius-md: 14px;
+                --radius-lg: 20px;
+                --green: #4caf50;
+                --orange: #ff9800;
+                --red: #f44336;
             }
-        }
 
-        window.startEditUsername = () => { editingUsername = true;  renderUsernameBar(); };
-        window.saveUsername       = () => {
-            const input = document.getElementById("ubarInput");
-            const val   = (input?.value || "").trim();
-            if (!val) { input?.classList.add("shake"); setTimeout(()=>input?.classList.remove("shake"),400); return; }
-            editingUsername = false;
-            setUser(val);
-            showToast(`Welcome, ${val}! 👋`);
-        };
-
-        /* ─── Helpers ─── */
-        function esc(s) { return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
-        function fmtDate(ts) { return ts ? new Date(ts).toLocaleString("en-AU",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}) : ""; }
-        function timeAgo(ts) {
-            if (!ts) return "";
-            const s = Math.floor((Date.now()-ts)/1000);
-            if (s < 60)    return "just now";
-            if (s < 3600)  return `${Math.floor(s/60)}m ago`;
-            if (s < 86400) return `${Math.floor(s/3600)}h ago`;
-            return fmtDate(ts);
-        }
-        const getVotes  = ()  => { try { return JSON.parse(localStorage.getItem(VOTES_KEY)||"[]"); } catch { return []; } };
-        const hasVoted  = k   => getVotes().includes(k);
-        const addVote   = k   => { const v = getVotes(); if (!v.includes(k)) { v.push(k); localStorage.setItem(VOTES_KEY,JSON.stringify(v)); } };
-        const statusLbl = s   => ({issue:"🔴 Issue",known:"🟠 Known",fixing:"🔵 Fixing",fixed:"🟢 Fixed"}[s]||s);
-        const countSame = i   => i.sameVotes ? Object.keys(i.sameVotes).length : 0;
-        const countCmts = i   => i.comments  ? Object.keys(i.comments).length  : 0;
-
-        /* ─── Toast ─── */
-        function showToast(msg,err=false){
-            const t=document.getElementById("toast");
-            document.getElementById("toastIcon").textContent = err?"❌":"✅";
-            document.getElementById("toastMsg").textContent  = msg;
-            t.className="toast"+(err?" error":"")+" show";
-            setTimeout(()=>{ t.className="toast"+(err?" error":""); },4000);
-        }
-
-        /* ─── Modals ─── */
-        window.closeModal = id => document.getElementById(id).classList.remove("visible");
-        const openModal   = id => document.getElementById(id).classList.add("visible");
-        document.querySelectorAll(".modal-overlay").forEach(o =>
-            o.addEventListener("click", e => { if (e.target===o) o.classList.remove("visible"); }));
-
-        /* ─── Firebase ─── */
-        onValue(ref(db,"worldIssues"), snap => {
-            const data = snap.val();
-            allIssues = data
-                ? Object.entries(data)
-                    .filter(([k]) => k !== "_placeholder")
-                    .map(([k,v]) => ({key:k,...v}))
-                    .sort((a,b) => (b.createdAt||0)-(a.createdAt||0))
-                : [];
-            updateStats();
-            applyFilters();
-            if (currentIssueKey) {
-                const found = allIssues.find(i => i.key===currentIssueKey);
-                if (found) { refreshDetailCounts(found); loadComments(currentIssueKey); }
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+                background: var(--bg-primary);
+                color: var(--text-primary);
+                min-height: 100vh;
+                padding: 40px 20px;
+                line-height: 1.5;
+                -webkit-font-smoothing: antialiased;
+                position: relative;
+                max-width: 100vw;
             }
-        });
-
-        function updateStats() {
-            const c={issue:0,known:0,fixing:0,fixed:0};
-            allIssues.forEach(i => { if (c[i.status]!==undefined) c[i.status]++; });
-            document.getElementById("statIssue") .textContent = c.issue;
-            document.getElementById("statKnown") .textContent = c.known;
-            document.getElementById("statFixing").textContent = c.fixing;
-            document.getElementById("statFixed") .textContent = c.fixed;
-        }
-
-        window.setFilter = f => {
-            activeFilter = f;
-            document.querySelectorAll(".filter-chip").forEach(c => c.classList.toggle("active", c.dataset.filter===f));
-            applyFilters();
-        };
-
-        window.applyFilters = () => {
-            const q = (document.getElementById("searchInput")?.value||"").toLowerCase();
-            renderIssues(allIssues.filter(i => {
-                const mf = activeFilter==="all" || i.status===activeFilter;
-                const ms = !q || (i.title||"").toLowerCase().includes(q)
-                              || (i.description||"").toLowerCase().includes(q)
-                              || (i.username||"").toLowerCase().includes(q);
-                return mf && ms;
-            }));
-        };
-
-        /* ─── Issue list render ─── */
-        function renderIssues(list) {
-            const el = document.getElementById("issuesList");
-            if (!list.length) {
-                el.innerHTML = `<div class="empty-state">
-                    <div class="empty-icon">🎉</div>
-                    <div class="empty-title">No issues found</div>
-                    <div class="empty-sub">Try adjusting your filter, or <a href="#" onclick="openSubmitModal();return false;" style="color:var(--accent)">report a new one</a>.</div>
-                </div>`;
-                return;
+            body::before {
+                content: "";
+                position: fixed;
+                top: -50%; left: -50%;
+                width: 200%; height: 200%;
+                background: radial-gradient(circle at 30% 50%, rgba(33,150,243,0.1) 0%, transparent 50%),
+                            radial-gradient(circle at 70% 50%, rgba(33,150,243,0.05) 0%, transparent 50%);
+                animation: floatBg 20s ease-in-out infinite;
+                pointer-events: none;
             }
-            el.innerHTML = list.map((issue,i) => {
-                const s   = issue.status||"issue";
-                const sc  = countSame(issue);
-                const cc  = countCmts(issue);
-                const own = isOwner(issue.username);
-                return `<div class="issue-card status-${esc(s)}" style="animation-delay:${i*0.04}s" onclick="openDetail('${esc(issue.key)}')">
-                    <div class="issue-card-top">
-                        <div class="issue-card-info">
-                            <div class="issue-card-title">${esc(issue.title)}</div>
-                            <div class="issue-card-desc">${esc(issue.description)}</div>
-                        </div>
-                        <div class="issue-card-badges">
-                            <span class="status-badge ${esc(s)}">${statusLbl(s)}</span>
-                            ${own ? `<span class="mine-badge">✏️ Your post</span>` : ""}
-                            ${issue.videoUrl ? `<span class="has-video-badge">🎬 Video</span>` : ""}
-                        </div>
-                    </div>
-                    <div class="issue-card-footer">
-                        <div class="card-footer-left">
-                            <span class="meta-item">👤 ${esc(issue.username)}</span>
-                            <span class="meta-sep">·</span>
-                            <span class="meta-item">🕒 ${timeAgo(issue.createdAt)}</span>
-                            <span class="meta-sep">·</span>
-                            <span class="meta-item same-count">🙋 ${sc}</span>
-                            <span class="meta-sep">·</span>
-                            <span class="meta-item">💬 ${cc}</span>
-                        </div>
-                        ${own ? `<button class="card-delete-btn" onclick="event.stopPropagation();promptDeleteIssue('${esc(issue.key)}')">🗑️ Delete</button>` : ""}
-                    </div>
-                </div>`;
-            }).join("");
-        }
 
-        /* ─── Detail modal ─── */
-        window.openDetail = key => {
-            const issue = allIssues.find(i => i.key===key);
-            if (!issue) return;
-            currentIssueKey = key;
-            const s   = issue.status||"issue";
-            const own = isOwner(issue.username);
-
-            document.getElementById("detailHeader").className = `detail-modal-header status-${s}`;
-            document.getElementById("detailTitle").textContent = issue.title;
-            document.getElementById("detailDesc").textContent  = issue.description;
-
-            document.getElementById("detailMeta").innerHTML = `
-                <span class="detail-meta-item">👤 ${esc(issue.username)}</span>
-                <span class="detail-meta-item">🕒 ${fmtDate(issue.createdAt)}</span>
-                <span class="status-badge ${esc(s)}" style="margin-left:4px">${statusLbl(s)}</span>
-                ${own ? `<button class="detail-delete-btn" onclick="promptDeleteIssue('${esc(key)}')">🗑️ Delete my post</button>` : ""}`;
-
-            const vs = document.getElementById("detailVideoSection");
-            if (issue.videoUrl) { document.getElementById("detailVideo").src=issue.videoUrl; vs.style.display="block"; }
-            else vs.style.display="none";
-
-            refreshDetailCounts(issue);
-            loadComments(key);
-            openModal("detailModal");
-        };
-
-        function refreshDetailCounts(issue) {
-            if (issue.key!==currentIssueKey) return;
-            document.getElementById("detailSameCount").textContent = countSame(issue);
-            const voted = hasVoted(issue.key);
-            const btn   = document.getElementById("sameIssueBtn");
-            if (voted) { btn.innerHTML="✅ Confirmed"; btn.classList.add("voted"); btn.disabled=true; }
-            else { btn.innerHTML="<span>🙋</span> I have this too"; btn.classList.remove("voted"); btn.disabled=false; }
-        }
-
-        function loadComments(key) {
-            const issue    = allIssues.find(i => i.key===key);
-            const comments = issue?.comments
-                ? Object.entries(issue.comments).sort((a,b) => (a[1].createdAt||0)-(b[1].createdAt||0))
-                : [];
-            const cl  = document.getElementById("commentList");
-            const lbl = document.getElementById("commentCountLabel");
-            lbl.textContent = `Comments (${comments.length})`;
-
-            cl.innerHTML = comments.length
-                ? comments.map(([ck,c],idx) => {
-                    const mine = isOwner(c.username);
-                    return `<div class="comment-item${mine?" is-mine":""}" style="animation-delay:${idx*0.04}s">
-                        <div class="comment-top">
-                            <div class="comment-avatar"><img src="https://mc-heads.net/avatar/${encodeURIComponent(c.username||"Steve")}/28" onerror="this.style.display='none'" /></div>
-                            <span class="comment-username">${esc(c.username)}</span>
-                            ${mine ? `<span class="comment-mine-tag">you</span>` : ""}
-                            <span class="comment-date">${timeAgo(c.createdAt)}</span>
-                        </div>
-                        <div class="comment-text">${esc(c.text)}</div>
-                        ${mine ? `<div class="comment-actions"><button class="comment-delete-btn" onclick="promptDeleteComment('${esc(key)}','${esc(ck)}')">🗑️ Delete</button></div>` : ""}
-                    </div>`;
-                  }).join("")
-                : `<div class="no-comments">No comments yet — be the first!</div>`;
-
-            // Comment form
-            const u      = getUser();
-            const formEl = document.getElementById("commentFormWrap");
-            if (!u) {
-                formEl.innerHTML = `<div class="no-user-hint">⚠️ Set your username at the top to leave a comment.</div>`;
-            } else {
-                formEl.innerHTML = `
-                    <p class="posting-as">Posting as <strong>${esc(u)}</strong> · <button onclick="startEditUsername()">change</button></p>
-                    <textarea class="comment-input" id="commentText" rows="3" placeholder="Add a comment…"
-                        autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
-                    <button class="comment-submit-btn" onclick="submitComment()">Post Comment →</button>`;
+            @keyframes floatBg {
+                0%,100% { transform: translate(0,0) rotate(0deg); }
+                33% { transform: translate(30px,-30px) rotate(5deg); }
+                66% { transform: translate(-20px,20px) rotate(-5deg); }
             }
-        }
-
-        /* ─── Same Issue ─── */
-        window.handleSameIssue = () => {
-            if (!currentIssueKey) return;
-            pendingSameKey = currentIssueKey;
-            const u = getUser();
-            if (u) {
-                document.getElementById("sameConfirmSub").textContent = `Confirm you've experienced this as ${u}?`;
-                document.getElementById("sameUsername").value = u;
-            } else {
-                document.getElementById("sameConfirmSub").textContent = "Enter your Minecraft username to confirm.";
-                document.getElementById("sameUsername").value = "";
+            @keyframes fadeInUp {
+                from { opacity:0; transform:translateY(30px); }
+                to { opacity:1; transform:translateY(0); }
             }
-            openModal("sameConfirmModal");
-        };
+            @keyframes spin { to { transform: rotate(360deg); } }
+            @keyframes slideIn {
+                from { opacity:0; transform:translateY(12px); }
+                to { opacity:1; transform:translateY(0); }
+            }
+            @keyframes pulseDot {
+                0%,100% { opacity:1; transform:scale(1); }
+                50% { opacity:0.5; transform:scale(0.8); }
+            }
+            @keyframes float-particle {
+                0% { transform:translateY(100vh) translateX(0); opacity:0; }
+                10% { opacity:0.5; }
+                90% { opacity:0.5; }
+                100% { transform:translateY(-100px) translateX(100px); opacity:0; }
+            }
 
-        window.confirmSameIssue = async () => {
-            const username = document.getElementById("sameUsername").value.trim();
-            if (!username) { showToast("Please enter your username.",true); return; }
-            setUser(username);
-            closeModal("sameConfirmModal");
-            const safe = username.replace(/[.#$[\]]/g,"_");
-            try {
-                await update(ref(db,`worldIssues/${pendingSameKey}/sameVotes`),{[safe]:true});
-                addVote(pendingSameKey);
-                showToast("Confirmed — vote recorded! 🙋");
-            } catch { showToast("Failed to record vote.",true); }
-        };
+            .container { width:100%; max-width:960px; margin:0 auto; animation:fadeInUp 0.8s cubic-bezier(0.16,1,0.3,1); position:relative; z-index:1; }
 
-        /* ─── Delete own issue ─── */
-        window.promptDeleteIssue = key => {
-            pendingDeleteIssueFn = async () => {
-                await remove(ref(db,`worldIssues/${key}`));
-                closeModal("detailModal");
-                showToast("Your issue was deleted.");
-            };
-            openModal("deleteIssueModal");
-        };
-        document.getElementById("deleteIssueConfirmBtn").addEventListener("click", async () => {
-            if (!pendingDeleteIssueFn) return;
-            try { await pendingDeleteIssueFn(); } catch { showToast("Delete failed.",true); }
-            closeModal("deleteIssueModal"); pendingDeleteIssueFn=null;
-        });
+            .header { text-align:center; margin-bottom:40px; }
+            .logo-container { margin-bottom:28px; }
+            .logo {
+                width:96px; height:96px; margin:0 auto;
+                border-radius:24px; display:flex; align-items:center; justify-content:center;
+                overflow:hidden; box-shadow:var(--shadow-glow),var(--shadow-lg);
+                background:var(--bg-secondary); border:2px solid var(--border);
+                transition:all 0.4s cubic-bezier(0.16,1,0.3,1); text-decoration:none;
+            }
+            .logo:hover { transform:scale(1.05) translateY(-5px); border-color:var(--accent); }
+            .logo img { width:100%; height:100%; object-fit:cover; }
+            .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--text-secondary); text-decoration:none; font-size:14px; margin-bottom:20px; transition:all 0.3s ease; font-weight:500; }
+            .back-link:hover { color:var(--accent); }
+            h1 { font-size:48px; font-weight:700; letter-spacing:-0.03em; margin-bottom:12px; background:linear-gradient(135deg,var(--text-primary) 0%,var(--accent) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+            .header-subtitle { font-size:16px; color:var(--text-secondary); }
 
-        /* ─── Delete own comment ─── */
-        window.promptDeleteComment = (issueKey,commentKey) => {
-            pendingDeleteCommentFn = async () => {
-                await remove(ref(db,`worldIssues/${issueKey}/comments/${commentKey}`));
-                showToast("Comment deleted.");
-            };
-            openModal("deleteCommentModal");
-        };
-        document.getElementById("deleteCommentConfirmBtn").addEventListener("click", async () => {
-            if (!pendingDeleteCommentFn) return;
-            try { await pendingDeleteCommentFn(); } catch { showToast("Delete failed.",true); }
-            closeModal("deleteCommentModal"); pendingDeleteCommentFn=null;
-        });
+            /* Stats */
+            .stats-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
+            .stat-card { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-md); padding:20px; text-align:center; transition:all 0.3s ease; cursor:default; }
+            .stat-card:hover { border-color:var(--border-hover); transform:translateY(-2px); box-shadow:var(--shadow-md); }
+            .stat-value { font-size:30px; font-weight:700; color:var(--text-primary); font-family:"JetBrains Mono",monospace; }
+            .stat-label { font-size:11px; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:0.08em; font-weight:600; margin-top:4px; }
+            .stat-card.s-issue .stat-value { color:var(--red); }
+            .stat-card.s-known .stat-value { color:var(--orange); }
+            .stat-card.s-fixing .stat-value { color:var(--accent); }
+            .stat-card.s-fixed .stat-value { color:var(--green); }
 
-        /* ─── Post comment ─── */
-        window.submitComment = async () => {
-            const u    = getUser();
-            const text = document.getElementById("commentText")?.value.trim();
-            if (!u)    { showToast("Set your username first.",true); return; }
-            if (!text) { showToast("Please write a comment.",true); return; }
-            if (!currentIssueKey) return;
-            try {
-                await push(ref(db,`worldIssues/${currentIssueKey}/comments`),{username:u,text,createdAt:serverTimestamp()});
-                document.getElementById("commentText").value="";
-                showToast("Comment posted! 💬");
-            } catch { showToast("Failed to post comment.",true); }
-        };
+            /* Controls */
+            .controls { display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap; align-items:center; }
+            .search-input { flex:1; min-width:220px; background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 14px; color:var(--text-primary); font-size:14px; font-family:inherit; outline:none; transition:all 0.3s ease; }
+            .search-input::placeholder { color:rgba(100,181,246,0.35); }
+            .search-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(33,150,243,0.12); }
+            .report-btn { background:linear-gradient(135deg,var(--red),#ef5350); color:white; border:none; padding:10px 22px; border-radius:var(--radius-sm); font-size:14px; font-weight:600; cursor:pointer; transition:all 0.3s ease; box-shadow:0 4px 14px rgba(244,67,54,0.35); display:flex; align-items:center; gap:8px; white-space:nowrap; }
+            .report-btn:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(244,67,54,0.45); }
 
-        /* ─── Submit Issue ─── */
-        window.openSubmitModal = () => {
-            renderSubmitUserField();
-            openModal("submitModal");
-        };
+            .filter-chips { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; }
+            .filter-chip { padding:6px 16px; border-radius:20px; background:var(--bg-secondary); border:1px solid var(--border); color:var(--text-secondary); font-size:13px; font-weight:600; cursor:pointer; transition:all 0.2s ease; white-space:nowrap; display:flex; align-items:center; gap:6px; }
+            .filter-chip:hover { border-color:var(--border-hover); color:var(--text-primary); }
+            .filter-chip.active { background:rgba(33,150,243,0.12); border-color:var(--accent); color:var(--accent); }
+            .filter-chip.active.chip-issue { background:rgba(244,67,54,0.1); border-color:rgba(244,67,54,0.4); color:var(--red); }
+            .filter-chip.active.chip-known { background:rgba(255,152,0,0.1); border-color:rgba(255,152,0,0.4); color:var(--orange); }
+            .filter-chip.active.chip-fixing { background:rgba(33,150,243,0.1); border-color:rgba(33,150,243,0.4); color:var(--accent); }
+            .filter-chip.active.chip-fixed { background:rgba(76,175,80,0.1); border-color:rgba(76,175,80,0.4); color:var(--green); }
+            .chip-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+            .chip-dot.issue { background:var(--red); }
+            .chip-dot.known { background:var(--orange); }
+            .chip-dot.fixing { background:var(--accent); animation:pulseDot 1.8s ease-in-out infinite; }
+            .chip-dot.fixed { background:var(--green); }
 
-        function renderSubmitUserField() {
-            const u  = getUser();
-            const el = document.getElementById("submitUserFieldWrap");
-            if (u) {
-                el.innerHTML = `
+            /* Issue Cards */
+            .issues-list { display:grid; gap:14px; }
+            .issue-card { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-lg); padding:22px 24px; cursor:pointer; transition:all 0.35s cubic-bezier(0.16,1,0.3,1); position:relative; overflow:hidden; animation:slideIn 0.35s ease-out backwards; }
+            .issue-card::before { content:""; position:absolute; top:0; left:0; bottom:0; width:4px; }
+            .issue-card.status-issue::before { background:var(--red); }
+            .issue-card.status-known::before { background:var(--orange); }
+            .issue-card.status-fixing::before { background:var(--accent); }
+            .issue-card.status-fixed::before { background:var(--green); }
+            .issue-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); border-color:var(--border-hover); }
+            .issue-card-top { display:flex; align-items:flex-start; gap:14px; margin-bottom:10px; }
+            .issue-card-info { flex:1; min-width:0; }
+            .issue-card-title { font-size:16px; font-weight:600; color:var(--text-primary); margin-bottom:4px; line-height:1.4; }
+            .issue-card-desc { font-size:13px; color:var(--text-secondary); overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; line-height:1.5; }
+            .issue-card-badges { display:flex; align-items:center; gap:8px; flex-shrink:0; flex-wrap:wrap; justify-content:flex-end; }
+            .status-badge { display:inline-flex; align-items:center; gap:5px; padding:4px 11px; border-radius:20px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; white-space:nowrap; }
+            .status-badge.issue { background:rgba(244,67,54,0.12); border:1px solid rgba(244,67,54,0.3); color:var(--red); }
+            .status-badge.known { background:rgba(255,152,0,0.12); border:1px solid rgba(255,152,0,0.3); color:var(--orange); }
+            .status-badge.fixing { background:rgba(33,150,243,0.12); border:1px solid rgba(33,150,243,0.3); color:var(--accent); }
+            .status-badge.fixed { background:rgba(76,175,80,0.12); border:1px solid rgba(76,175,80,0.3); color:var(--green); }
+            .has-video-badge { display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border-radius:20px; background:rgba(156,39,176,0.12); border:1px solid rgba(156,39,176,0.3); color:#ce93d8; font-size:12px; font-weight:600; white-space:nowrap; }
+            .mine-badge { display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border-radius:20px; background:rgba(33,150,243,0.1); border:1px solid rgba(33,150,243,0.25); color:var(--text-tertiary); font-size:11px; font-weight:600; white-space:nowrap; }
+            .issue-card-footer { display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:12px; color:var(--text-tertiary); font-family:"JetBrains Mono",monospace; flex-wrap:wrap; }
+            .card-footer-left { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+            .meta-item { display:flex; align-items:center; gap:4px; }
+            .meta-sep { opacity:0.3; }
+            .same-count { color:var(--orange); font-weight:600; }
+            .card-delete-btn { background:none; border:1px solid transparent; color:rgba(244,67,54,0.4); font-size:12px; cursor:pointer; padding:5px 10px; border-radius:var(--radius-sm); transition:all 0.2s; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+            .card-delete-btn:hover { color:var(--red); background:rgba(244,67,54,0.1); border-color:rgba(244,67,54,0.3); }
+
+            /* Empty / Loading */
+            .empty-state { text-align:center; padding:70px 20px; background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-lg); }
+            .empty-icon { font-size:52px; margin-bottom:14px; }
+            .empty-title { font-size:20px; font-weight:600; color:var(--text-primary); margin-bottom:8px; }
+            .empty-sub { font-size:14px; color:var(--text-secondary); }
+            .loading-state { text-align:center; padding:60px; color:var(--text-secondary); }
+            .loading-spinner { width:36px; height:36px; border:3px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px; }
+
+            /* Modals */
+            .modal-overlay { position:fixed; inset:0; background:rgba(10,25,41,0.88); backdrop-filter:blur(6px); z-index:150; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity 0.3s ease; overflow-y:auto; }
+            .modal-overlay.visible { opacity:1; pointer-events:all; }
+
+            .submit-modal { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-lg); padding:36px; max-width:560px; width:100%; box-shadow:var(--shadow-lg); position:relative; overflow:hidden; transform:scale(0.95) translateY(20px); transition:all 0.35s cubic-bezier(0.16,1,0.3,1); max-height:90vh; overflow-y:auto; }
+            .modal-overlay.visible .submit-modal { transform:scale(1) translateY(0); }
+            .submit-modal::before { content:""; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--red),#ef5350); }
+            .modal-close { position:absolute; top:16px; right:16px; background:none; border:none; color:var(--text-tertiary); font-size:20px; cursor:pointer; width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+            .modal-close:hover { color:var(--text-primary); background:var(--bg-tertiary); }
+            .modal-title { font-size:22px; font-weight:700; color:var(--text-primary); margin-bottom:6px; }
+            .modal-sub { font-size:14px; color:var(--text-secondary); margin-bottom:28px; }
+            .form-grid { display:grid; gap:18px; }
+            .form-field label { display:block; font-size:12px; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:7px; font-family:"JetBrains Mono",monospace; }
+            .form-field input, .form-field textarea { width:100%; background:var(--bg-primary); border:1px solid var(--border); border-radius:var(--radius-sm); padding:11px 14px; color:var(--text-primary); font-size:14px; font-family:inherit; outline:none; transition:all 0.3s ease; resize:none; }
+            .form-field input::placeholder, .form-field textarea::placeholder { color:rgba(100,181,246,0.35); }
+            .form-field input:focus, .form-field textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(33,150,243,0.12); background:var(--bg-secondary); }
+            .char-hint { font-size:11px; color:var(--text-tertiary); margin-top:5px; text-align:right; font-family:"JetBrains Mono",monospace; }
+
+            .video-upload-area { border:2px dashed var(--border); border-radius:var(--radius-md); padding:28px 20px; text-align:center; transition:all 0.3s ease; cursor:pointer; position:relative; }
+            .video-upload-area:hover { border-color:var(--accent); background:rgba(33,150,243,0.04); }
+            .video-upload-area.dragging { border-color:var(--accent); background:rgba(33,150,243,0.08); }
+            .video-upload-area.has-file { border-color:rgba(156,39,176,0.4); background:rgba(156,39,176,0.05); border-style:solid; }
+            .upload-icon { font-size:32px; margin-bottom:10px; }
+            .upload-label { font-size:14px; color:var(--text-secondary); margin-bottom:4px; }
+            .upload-hint { font-size:12px; color:var(--text-tertiary); }
+            .upload-file-input { position:absolute; inset:0; opacity:0; cursor:pointer; }
+            .upload-progress-wrap { margin-top:12px; display:none; }
+            .upload-progress-wrap.visible { display:block; }
+            .upload-progress-bar-track { height:6px; background:var(--bg-tertiary); border-radius:3px; overflow:hidden; }
+            .upload-progress-bar-fill { height:100%; background:linear-gradient(90deg,#9c27b0,#ce93d8); border-radius:3px; transition:width 0.2s; width:0%; }
+            .upload-progress-text { font-size:12px; color:var(--text-tertiary); margin-top:6px; font-family:"JetBrains Mono",monospace; }
+            .upload-success { align-items:center; gap:10px; padding:12px 14px; background:rgba(156,39,176,0.1); border:1px solid rgba(156,39,176,0.3); border-radius:var(--radius-sm); margin-top:10px; display:none; }
+            .upload-success.visible { display:flex; }
+            .upload-success-text { flex:1; font-size:13px; color:#ce93d8; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+            .upload-clear-btn { background:none; border:none; color:rgba(244,67,54,0.5); cursor:pointer; font-size:14px; padding:2px; transition:color 0.2s; }
+            .upload-clear-btn:hover { color:var(--red); }
+            .submit-btn { width:100%; background:linear-gradient(135deg,var(--red),#ef5350); color:white; border:none; padding:14px 28px; border-radius:var(--radius-md); font-size:15px; font-weight:600; cursor:pointer; transition:all 0.3s ease; box-shadow:0 4px 14px rgba(244,67,54,0.3); margin-top:4px; display:flex; align-items:center; justify-content:center; gap:8px; }
+            .submit-btn:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(244,67,54,0.4); }
+            .submit-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+            /* Detail modal */
+            .detail-modal { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-lg); max-width:680px; width:100%; box-shadow:var(--shadow-lg); position:relative; overflow:hidden; transform:scale(0.95) translateY(20px); transition:all 0.35s cubic-bezier(0.16,1,0.3,1); max-height:90vh; display:flex; flex-direction:column; }
+            .modal-overlay.visible .detail-modal { transform:scale(1) translateY(0); }
+            .detail-modal-header { padding:28px 28px 20px; border-bottom:1px solid var(--border); position:relative; flex-shrink:0; }
+            .detail-modal-header::before { content:""; position:absolute; top:0; left:0; right:0; height:3px; }
+            .detail-modal-header.status-issue::before { background:var(--red); }
+            .detail-modal-header.status-known::before { background:var(--orange); }
+            .detail-modal-header.status-fixing::before { background:var(--accent); }
+            .detail-modal-header.status-fixed::before { background:var(--green); }
+            .detail-modal-body { overflow-y:auto; flex:1; padding:24px 28px; }
+            .detail-title { font-size:20px; font-weight:700; color:var(--text-primary); margin-bottom:10px; padding-right:40px; line-height:1.4; }
+            .detail-meta { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
+            .detail-meta-item { font-size:12px; color:var(--text-tertiary); font-family:"JetBrains Mono",monospace; }
+            .detail-delete-btn { display:inline-flex; align-items:center; gap:5px; padding:5px 12px; border-radius:var(--radius-sm); background:rgba(244,67,54,0.08); border:1px solid rgba(244,67,54,0.25); color:rgba(244,67,54,0.65); font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+            .detail-delete-btn:hover { background:rgba(244,67,54,0.15); border-color:rgba(244,67,54,0.5); color:var(--red); }
+            .detail-desc { font-size:14px; color:var(--text-secondary); line-height:1.7; padding:14px 16px; background:var(--bg-primary); border-radius:var(--radius-sm); border-left:3px solid var(--border); margin-bottom:20px; white-space:pre-wrap; }
+            .detail-video { margin-bottom:20px; }
+            .detail-video video { width:100%; border-radius:var(--radius-md); border:1px solid rgba(156,39,176,0.3); background:#000; max-height:300px; }
+            .detail-video-label { font-size:12px; color:#ce93d8; font-family:"JetBrains Mono",monospace; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+            .same-issue-section { display:flex; align-items:center; gap:16px; padding:16px 18px; background:var(--bg-primary); border-radius:var(--radius-md); border:1px solid var(--border); margin-bottom:20px; }
+            .same-issue-count-big { font-size:28px; font-weight:700; color:var(--orange); font-family:"JetBrains Mono",monospace; }
+            .same-issue-label { font-size:13px; color:var(--text-secondary); flex:1; }
+            .same-issue-btn { background:rgba(255,152,0,0.1); border:1px solid rgba(255,152,0,0.35); color:var(--orange); padding:9px 18px; border-radius:var(--radius-sm); font-size:14px; font-weight:600; cursor:pointer; transition:all 0.3s ease; display:flex; align-items:center; gap:6px; white-space:nowrap; }
+            .same-issue-btn:hover { background:rgba(255,152,0,0.18); border-color:rgba(255,152,0,0.5); transform:translateY(-1px); }
+            .same-issue-btn.voted { background:rgba(255,152,0,0.2); border-color:var(--orange); cursor:default; }
+            .same-issue-btn:disabled { opacity:0.6; cursor:default; transform:none; }
+
+            /* Comments */
+            .comments-section-title { font-size:14px; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.06em; font-family:"JetBrains Mono",monospace; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+            .comment-list { display:grid; gap:10px; margin-bottom:16px; }
+            .comment-item { background:var(--bg-primary); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; animation:slideIn 0.25s ease-out backwards; }
+            .comment-item.is-mine { border-color:rgba(33,150,243,0.22); }
+            .comment-top { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+            .anon-avatar { width:28px; height:28px; border-radius:8px; background:var(--bg-tertiary); border:1px solid var(--border); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:14px; }
+            .comment-username { font-size:13px; font-weight:600; color:var(--text-primary); font-family:"JetBrains Mono",monospace; }
+            .comment-mine-tag { font-size:10px; color:var(--accent); background:rgba(33,150,243,0.1); border:1px solid rgba(33,150,243,0.2); padding:1px 7px; border-radius:10px; font-weight:600; }
+            .comment-date { font-size:11px; color:var(--text-tertiary); margin-left:auto; }
+            .comment-text { font-size:13px; color:var(--text-secondary); line-height:1.6; }
+            .comment-actions { display:flex; align-items:center; justify-content:flex-end; margin-top:8px; }
+            .comment-delete-btn { background:none; border:none; color:rgba(244,67,54,0.35); font-size:12px; cursor:pointer; padding:3px 8px; border-radius:6px; transition:all 0.2s; display:flex; align-items:center; gap:4px; }
+            .comment-delete-btn:hover { color:var(--red); background:rgba(244,67,54,0.1); }
+            .comment-form { display:grid; gap:10px; padding-top:14px; border-top:1px solid var(--border); }
+            .comment-input { background:var(--bg-primary); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 14px; color:var(--text-primary); font-size:13px; font-family:inherit; outline:none; transition:all 0.3s ease; resize:none; min-height:72px; }
+            .comment-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(33,150,243,0.12); background:var(--bg-secondary); }
+            .comment-submit-btn { background:linear-gradient(135deg,var(--accent),var(--accent-hover)); color:white; border:none; padding:10px 18px; border-radius:var(--radius-sm); font-size:13px; font-weight:600; cursor:pointer; transition:all 0.3s ease; }
+            .comment-submit-btn:hover { transform:translateY(-1px); }
+            .no-comments { font-size:13px; color:var(--text-tertiary); text-align:center; padding:16px; font-style:italic; }
+
+            /* Confirm modals */
+            .confirm-modal { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-lg); padding:36px; max-width:400px; width:100%; box-shadow:var(--shadow-lg); text-align:center; transform:scale(0.95); transition:transform 0.3s cubic-bezier(0.16,1,0.3,1); }
+            .modal-overlay.visible .confirm-modal { transform:scale(1); }
+            .confirm-icon { font-size:38px; margin-bottom:14px; }
+            .confirm-title { font-size:19px; font-weight:700; color:var(--text-primary); margin-bottom:8px; }
+            .confirm-sub { font-size:14px; color:var(--text-secondary); margin-bottom:24px; line-height:1.6; }
+            .confirm-btns { display:flex; gap:10px; }
+            .confirm-cancel { flex:1; background:var(--bg-tertiary); border:1px solid var(--border); color:var(--text-secondary); padding:11px; border-radius:var(--radius-sm); font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+            .confirm-cancel:hover { color:var(--text-primary); border-color:var(--border-hover); }
+            .btn-red { flex:1; background:rgba(244,67,54,0.15); border:1px solid rgba(244,67,54,0.4); color:var(--red); padding:11px; border-radius:var(--radius-sm); font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+            .btn-red:hover { background:rgba(244,67,54,0.25); }
+
+            /* Toast */
+            .toast { position:fixed; bottom:32px; left:50%; transform:translateX(-50%) translateY(100px); background:var(--bg-tertiary); border:1px solid rgba(76,175,80,0.4); border-radius:var(--radius-md); padding:14px 22px; display:flex; align-items:center; gap:10px; font-size:14px; font-weight:500; color:var(--text-primary); box-shadow:var(--shadow-lg); z-index:300; transition:transform 0.5s cubic-bezier(0.16,1,0.3,1); white-space:nowrap; }
+            .toast.show { transform:translateX(-50%) translateY(0); }
+            .toast.error { border-color:rgba(244,67,54,0.4); }
+
+            .particles { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
+            .particle { position:absolute; width:3px; height:3px; background:var(--accent); border-radius:50%; opacity:0; animation:float-particle 15s infinite; box-shadow:0 0 10px var(--accent); }
+            .particle:nth-child(1) { left:10%; animation-delay:0s; }
+            .particle:nth-child(2) { left:25%; animation-delay:3s; }
+            .particle:nth-child(3) { left:40%; animation-delay:6s; }
+            .particle:nth-child(4) { left:60%; animation-delay:9s; }
+            .particle:nth-child(5) { left:75%; animation-delay:12s; }
+            .particle:nth-child(6) { left:90%; animation-delay:2s; }
+
+            .footer { text-align:center; margin-top:60px; padding-top:32px; border-top:1px solid var(--border); }
+            .footer-text { font-size:14px; color:var(--text-tertiary); line-height:1.6; }
+            .footer-text a { color:var(--accent); text-decoration:none; }
+            .admin-footer-link { color:rgba(100,181,246,0.3) !important; font-size:12px; }
+            .admin-footer-link:hover { color:var(--accent) !important; }
+
+            @media (max-width:768px) {
+                body { padding:28px 14px; }
+                h1 { font-size:32px; }
+                .logo { width:80px; height:80px; }
+                .stats-bar { grid-template-columns:1fr 1fr; }
+                .detail-modal-body, .detail-modal-header { padding:18px; }
+                .submit-modal { padding:24px; }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="particles">
+            <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+            <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+        </div>
+
+        <!-- Submit Issue Modal -->
+        <div class="modal-overlay" id="submitModal">
+            <div class="submit-modal">
+                <button class="modal-close" onclick="closeModal('submitModal')">✕</button>
+                <div class="modal-title">🐛 Report a World Issue</div>
+                <div class="modal-sub">Found something broken? Submit anonymously and the community can confirm it.</div>
+                <div class="form-grid">
                     <div class="form-field">
-                        <label>Submitting as</label>
-                        <div class="locked-user-hint">
-                            <div class="locked-user-av">
-                                <img src="https://mc-heads.net/avatar/${encodeURIComponent(u)}/28" onerror="this.style.display='none'" />
+                        <label for="submitTitle">Issue Title *</label>
+                        <input type="text" id="submitTitle" placeholder="Chunk not loading near spawn" maxlength="100"
+                            autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                    </div>
+                    <div class="form-field">
+                        <label for="submitDesc">Description *</label>
+                        <textarea id="submitDesc" rows="5"
+                            placeholder="Describe the issue in detail — where it happens, steps to reproduce..."
+                            autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
+                        <div class="char-hint" id="descCharHint">0 / 1000</div>
+                    </div>
+                    <div class="form-field">
+                        <label>Video Evidence <span style="text-transform:none;font-weight:400;color:var(--text-tertiary)">(optional)</span></label>
+                        <div class="video-upload-area" id="uploadArea" onclick="document.getElementById('videoFileInput').click()">
+                            <input type="file" id="videoFileInput" class="upload-file-input" accept="video/*"
+                                onchange="handleVideoSelect(event)" onclick="event.stopPropagation()" />
+                            <div id="uploadDefault">
+                                <div class="upload-icon">🎥</div>
+                                <div class="upload-label">Click or drag to upload a video</div>
+                                <div class="upload-hint">MP4, MOV, WebM — up to 100MB</div>
                             </div>
-                            <span class="locked-user-name">${esc(u)}</span>
-                            <button class="locked-user-change" onclick="closeModal('submitModal');startEditUsername()">Change username</button>
+                            <div class="upload-progress-wrap" id="uploadProgressWrap">
+                                <div class="upload-progress-bar-track">
+                                    <div class="upload-progress-bar-fill" id="uploadProgressFill"></div>
+                                </div>
+                                <div class="upload-progress-text" id="uploadProgressText">Uploading… 0%</div>
+                            </div>
+                        </div>
+                        <div class="upload-success" id="uploadSuccess">
+                            <span>🎬</span>
+                            <span class="upload-success-text" id="uploadSuccessName"></span>
+                            <button class="upload-clear-btn" onclick="clearVideoUpload(event)">✕</button>
+                        </div>
+                    </div>
+                    <button class="submit-btn" id="submitIssueBtn" onclick="submitIssue()">
+                        <span>🚨</span> Submit Anonymously
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detail Modal -->
+        <div class="modal-overlay" id="detailModal">
+            <div class="detail-modal">
+                <div class="detail-modal-header" id="detailHeader">
+                    <button class="modal-close" onclick="closeModal('detailModal')">✕</button>
+                    <div class="detail-title" id="detailTitle"></div>
+                    <div class="detail-meta" id="detailMeta"></div>
+                </div>
+                <div class="detail-modal-body">
+                    <div id="detailVideoSection" class="detail-video" style="display:none">
+                        <div class="detail-video-label">🎬 Video Evidence</div>
+                        <video id="detailVideo" controls preload="metadata"></video>
+                    </div>
+                    <div class="detail-desc" id="detailDesc"></div>
+                    <div class="same-issue-section">
+                        <div>
+                            <div class="same-issue-count-big" id="detailSameCount">0</div>
+                            <div class="same-issue-label">players have the same issue</div>
+                        </div>
+                        <button class="same-issue-btn" id="sameIssueBtn" onclick="handleSameIssue()">
+                            <span>🙋</span> I have this too
+                        </button>
+                    </div>
+                    <div class="comments-section-title">💬 <span id="commentCountLabel">Comments</span></div>
+                    <div class="comment-list" id="commentList"></div>
+                    <div id="commentFormWrap"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete own issue -->
+        <div class="modal-overlay" id="deleteIssueModal">
+            <div class="confirm-modal">
+                <div class="confirm-icon">🗑️</div>
+                <div class="confirm-title">Delete your issue?</div>
+                <div class="confirm-sub">This removes your report and all its comments permanently.</div>
+                <div class="confirm-btns">
+                    <button class="confirm-cancel" onclick="closeModal('deleteIssueModal')">Cancel</button>
+                    <button class="btn-red" id="deleteIssueConfirmBtn">🗑️ Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete own comment -->
+        <div class="modal-overlay" id="deleteCommentModal">
+            <div class="confirm-modal">
+                <div class="confirm-icon">🗑️</div>
+                <div class="confirm-title">Delete your comment?</div>
+                <div class="confirm-sub">This cannot be undone.</div>
+                <div class="confirm-btns">
+                    <button class="confirm-cancel" onclick="closeModal('deleteCommentModal')">Cancel</button>
+                    <button class="btn-red" id="deleteCommentConfirmBtn">🗑️ Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="header">
+                <div class="logo-container">
+                    <a href="https://infinitysmp.github.io/" class="logo">
+                        <img src="https://infinitysmp.github.io/logo.png" alt="Infinity SMP" />
+                    </a>
+                </div>
+                <a href="https://infinitysmp.github.io/" class="back-link">← Back to Home</a>
+                <h1>Issue Tracker</h1>
+                <p class="header-subtitle">Report world issues anonymously and help the community track them</p>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-card s-issue"><div class="stat-value" id="statIssue">—</div><div class="stat-label">🔴 Issue</div></div>
+                <div class="stat-card s-known"><div class="stat-value" id="statKnown">—</div><div class="stat-label">🟠 Known</div></div>
+                <div class="stat-card s-fixing"><div class="stat-value" id="statFixing">—</div><div class="stat-label">🔵 Fixing</div></div>
+                <div class="stat-card s-fixed"><div class="stat-value" id="statFixed">—</div><div class="stat-label">🟢 Fixed</div></div>
+            </div>
+
+            <div class="controls">
+                <input type="text" class="search-input" id="searchInput" placeholder="🔍  Search issues…"
+                    oninput="applyFilters()" autocomplete="off" autocorrect="off" spellcheck="false" />
+                <button class="report-btn" onclick="openSubmitModal()">🚨 Report an Issue</button>
+            </div>
+
+            <div class="filter-chips">
+                <div class="filter-chip active" data-filter="all" onclick="setFilter('all')">All</div>
+                <div class="filter-chip chip-issue" data-filter="issue" onclick="setFilter('issue')"><span class="chip-dot issue"></span>Issue</div>
+                <div class="filter-chip chip-known" data-filter="known" onclick="setFilter('known')"><span class="chip-dot known"></span>Known</div>
+                <div class="filter-chip chip-fixing" data-filter="fixing" onclick="setFilter('fixing')"><span class="chip-dot fixing"></span>Fixing</div>
+                <div class="filter-chip chip-fixed" data-filter="fixed" onclick="setFilter('fixed')"><span class="chip-dot fixed"></span>Fixed</div>
+            </div>
+
+            <div class="issues-list" id="issuesList">
+                <div class="loading-state"><div class="loading-spinner"></div><div>Loading issues…</div></div>
+            </div>
+
+            <div class="footer">
+                <p class="footer-text">
+                    Infinity SMP Issue Tracker &nbsp;·&nbsp; <a href="https://discord.gg/3FbYYN4cQS">Discord</a><br />
+                    <a href="admin.html" class="admin-footer-link">Admin Panel</a>
+                </p>
+            </div>
+        </div>
+
+        <div class="toast" id="toast"><span id="toastIcon">✅</span>&nbsp;<span id="toastMsg"></span></div>
+
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+            import {
+                getDatabase, ref, push, onValue, update, remove, serverTimestamp
+            } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+            const FC = {
+                apiKey: "AIzaSyBgV9PoUFut3FPc0iChFNm2-h6-Uc5z6s0",
+                authDomain: "infinity-service-b2f10.firebaseapp.com",
+                databaseURL: "https://infinity-service-b2f10-default-rtdb.firebaseio.com",
+                projectId: "infinity-service-b2f10",
+                storageBucket: "infinity-service-b2f10.firebasestorage.app",
+                messagingSenderId: "805770674259",
+                appId: "1:805770674259:web:bcc520979e6772fda5c6a6"
+            };
+            const app = initializeApp(FC);
+            const db = getDatabase(app);
+
+            const CLOUD_NAME = "dgrmpcha9";
+            const UPLOAD_PRESET = "player_reports";
+            const VOTES_KEY = "infinitySMP_votes_v1";
+            // Invisible random ID stored per-browser for ownership only — never displayed to anyone
+            const ANON_KEY = "infinitySMP_anonId_v1";
+
+            let allIssues = [];
+            let activeFilter = "all";
+            let currentIssueKey = null;
+            let pendingVideoUrl = null;
+            let pendingDeleteIssueFn = null;
+            let pendingDeleteCommentFn = null;
+
+            /* ── Anonymous ID (ownership only, never shown) ── */
+            function getAnonId() {
+                let id = localStorage.getItem(ANON_KEY);
+                if (!id) {
+                    id = "anon_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+                    localStorage.setItem(ANON_KEY, id);
+                }
+                return id;
+            }
+            const isOwner = (storedAnonId) => !!storedAnonId && storedAnonId === getAnonId();
+
+            /* ── Helpers ── */
+            function esc(s) {
+                return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+            }
+            function fmtDate(ts) {
+                return ts ? new Date(ts).toLocaleString("en-AU",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}) : "";
+            }
+            function timeAgo(ts) {
+                if (!ts) return "";
+                const s = Math.floor((Date.now()-ts)/1000);
+                if (s<60) return "just now";
+                if (s<3600) return `${Math.floor(s/60)}m ago`;
+                if (s<86400) return `${Math.floor(s/3600)}h ago`;
+                return fmtDate(ts);
+            }
+            const getVotes = () => { try { return JSON.parse(localStorage.getItem(VOTES_KEY)||"[]"); } catch { return []; } };
+            const hasVoted = (k) => getVotes().includes(k);
+            const addVote = (k) => { const v=getVotes(); if(!v.includes(k)){v.push(k);localStorage.setItem(VOTES_KEY,JSON.stringify(v));} };
+            const statusLbl = (s) => ({issue:"🔴 Issue",known:"🟠 Known",fixing:"🔵 Fixing",fixed:"🟢 Fixed"})[s]||s;
+            const countSame = (i) => i.sameVotes ? Object.keys(i.sameVotes).length : 0;
+            const countCmts = (i) => i.comments ? Object.keys(i.comments).length : 0;
+
+            /* ── Toast ── */
+            function showToast(msg, err=false) {
+                const t = document.getElementById("toast");
+                document.getElementById("toastIcon").textContent = err ? "❌" : "✅";
+                document.getElementById("toastMsg").textContent = msg;
+                t.className = "toast"+(err?" error":"")+" show";
+                setTimeout(()=>{ t.className="toast"+(err?" error":""); }, 4000);
+            }
+
+            /* ── Modals ── */
+            window.closeModal = (id) => document.getElementById(id).classList.remove("visible");
+            const openModal = (id) => document.getElementById(id).classList.add("visible");
+            document.querySelectorAll(".modal-overlay").forEach(o =>
+                o.addEventListener("click", e => { if (e.target===o) o.classList.remove("visible"); })
+            );
+
+            /* ── Firebase ── */
+            onValue(ref(db,"worldIssues"), (snap) => {
+                const data = snap.val();
+                allIssues = data
+                    ? Object.entries(data)
+                        .filter(([k]) => k !== "_placeholder")
+                        .map(([k,v]) => ({key:k,...v}))
+                        .sort((a,b) => (b.createdAt||0)-(a.createdAt||0))
+                    : [];
+                updateStats();
+                applyFilters();
+                if (currentIssueKey) {
+                    const found = allIssues.find(i => i.key===currentIssueKey);
+                    if (found) { refreshDetailCounts(found); loadComments(currentIssueKey); }
+                }
+            });
+
+            function updateStats() {
+                const c = {issue:0,known:0,fixing:0,fixed:0};
+                allIssues.forEach(i => { if(c[i.status]!==undefined) c[i.status]++; });
+                document.getElementById("statIssue").textContent = c.issue;
+                document.getElementById("statKnown").textContent = c.known;
+                document.getElementById("statFixing").textContent = c.fixing;
+                document.getElementById("statFixed").textContent = c.fixed;
+            }
+
+            window.setFilter = (f) => {
+                activeFilter = f;
+                document.querySelectorAll(".filter-chip").forEach(c => c.classList.toggle("active", c.dataset.filter===f));
+                applyFilters();
+            };
+
+            window.applyFilters = () => {
+                const q = (document.getElementById("searchInput")?.value||"").toLowerCase();
+                renderIssues(allIssues.filter(i => {
+                    const mf = activeFilter==="all" || i.status===activeFilter;
+                    const ms = !q || (i.title||"").toLowerCase().includes(q) || (i.description||"").toLowerCase().includes(q);
+                    return mf && ms;
+                }));
+            };
+
+            /* ── Issue list ── */
+            function renderIssues(list) {
+                const el = document.getElementById("issuesList");
+                if (!list.length) {
+                    el.innerHTML = `<div class="empty-state">
+                        <div class="empty-icon">🎉</div>
+                        <div class="empty-title">No issues found</div>
+                        <div class="empty-sub">Try adjusting your filter, or <a href="#" onclick="openSubmitModal();return false;" style="color:var(--accent)">report a new one</a>.</div>
+                    </div>`;
+                    return;
+                }
+                el.innerHTML = list.map((issue, i) => {
+                    const s = issue.status||"issue";
+                    const sc = countSame(issue);
+                    const cc = countCmts(issue);
+                    const own = isOwner(issue.anonId);
+                    return `<div class="issue-card status-${esc(s)}" style="animation-delay:${i*0.04}s" onclick="openDetail('${esc(issue.key)}')">
+                        <div class="issue-card-top">
+                            <div class="issue-card-info">
+                                <div class="issue-card-title">${esc(issue.title)}</div>
+                                <div class="issue-card-desc">${esc(issue.description)}</div>
+                            </div>
+                            <div class="issue-card-badges">
+                                <span class="status-badge ${esc(s)}">${statusLbl(s)}</span>
+                                ${own ? `<span class="mine-badge">✏️ Your post</span>` : ""}
+                                ${issue.videoUrl ? `<span class="has-video-badge">🎬 Video</span>` : ""}
+                            </div>
+                        </div>
+                        <div class="issue-card-footer">
+                            <div class="card-footer-left">
+                                <span class="meta-item">👤 Anonymous</span>
+                                <span class="meta-sep">·</span>
+                                <span class="meta-item">🕒 ${timeAgo(issue.createdAt)}</span>
+                                <span class="meta-sep">·</span>
+                                <span class="meta-item same-count">🙋 ${sc}</span>
+                                <span class="meta-sep">·</span>
+                                <span class="meta-item">💬 ${cc}</span>
+                            </div>
+                            ${own ? `<button class="card-delete-btn" onclick="event.stopPropagation();promptDeleteIssue('${esc(issue.key)}')">🗑️ Delete</button>` : ""}
                         </div>
                     </div>`;
-            } else {
-                el.innerHTML = `
-                    <div class="form-field">
-                        <label for="submitUsername">Your Minecraft Username *</label>
-                        <input type="text" id="submitUsername" placeholder="Steve" maxlength="30"
-                            autocomplete="off" autocorrect="off" autocapitalize="off"
-                            spellcheck="false" data-form-type="other" />
+                }).join("");
+            }
+
+            /* ── Detail modal ── */
+            window.openDetail = (key) => {
+                const issue = allIssues.find(i => i.key===key);
+                if (!issue) return;
+                currentIssueKey = key;
+                const s = issue.status||"issue";
+                const own = isOwner(issue.anonId);
+
+                document.getElementById("detailHeader").className = `detail-modal-header status-${s}`;
+                document.getElementById("detailTitle").textContent = issue.title;
+                document.getElementById("detailDesc").textContent = issue.description;
+                document.getElementById("detailMeta").innerHTML = `
+                    <span class="detail-meta-item">👤 Anonymous</span>
+                    <span class="detail-meta-item">🕒 ${fmtDate(issue.createdAt)}</span>
+                    <span class="status-badge ${esc(s)}" style="margin-left:4px">${statusLbl(s)}</span>
+                    ${own ? `<button class="detail-delete-btn" onclick="promptDeleteIssue('${esc(key)}')">🗑️ Delete my post</button>` : ""}`;
+
+                const vs = document.getElementById("detailVideoSection");
+                if (issue.videoUrl) { document.getElementById("detailVideo").src = issue.videoUrl; vs.style.display="block"; }
+                else vs.style.display = "none";
+
+                refreshDetailCounts(issue);
+                loadComments(key);
+                openModal("detailModal");
+            };
+
+            function refreshDetailCounts(issue) {
+                if (issue.key !== currentIssueKey) return;
+                document.getElementById("detailSameCount").textContent = countSame(issue);
+                const voted = hasVoted(issue.key);
+                const btn = document.getElementById("sameIssueBtn");
+                if (voted) { btn.innerHTML="✅ Confirmed"; btn.classList.add("voted"); btn.disabled=true; }
+                else { btn.innerHTML="<span>🙋</span> I have this too"; btn.classList.remove("voted"); btn.disabled=false; }
+            }
+
+            function loadComments(key) {
+                const issue = allIssues.find(i => i.key===key);
+                const comments = issue?.comments
+                    ? Object.entries(issue.comments).sort((a,b) => (a[1].createdAt||0)-(b[1].createdAt||0))
+                    : [];
+                document.getElementById("commentCountLabel").textContent = `Comments (${comments.length})`;
+                document.getElementById("commentList").innerHTML = comments.length
+                    ? comments.map(([ck,c],idx) => {
+                        const mine = isOwner(c.anonId);
+                        return `<div class="comment-item${mine?" is-mine":""}" style="animation-delay:${idx*0.04}s">
+                            <div class="comment-top">
+                                <div class="anon-avatar">👤</div>
+                                <span class="comment-username">Anonymous</span>
+                                ${mine ? `<span class="comment-mine-tag">you</span>` : ""}
+                                <span class="comment-date">${timeAgo(c.createdAt)}</span>
+                            </div>
+                            <div class="comment-text">${esc(c.text)}</div>
+                            ${mine ? `<div class="comment-actions"><button class="comment-delete-btn" onclick="promptDeleteComment('${esc(key)}','${esc(ck)}')">🗑️ Delete</button></div>` : ""}
+                        </div>`;
+                    }).join("")
+                    : `<div class="no-comments">No comments yet — be the first!</div>`;
+
+                document.getElementById("commentFormWrap").innerHTML = `
+                    <div class="comment-form">
+                        <textarea class="comment-input" id="commentText" rows="3"
+                            placeholder="Add an anonymous comment…"
+                            autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
+                        <button class="comment-submit-btn" onclick="submitComment()">Post Anonymously →</button>
                     </div>`;
             }
-        }
 
-        document.getElementById("submitDesc").addEventListener("input", function() {
-            document.getElementById("descCharHint").textContent = `${this.value.length} / 1000`;
-        });
-
-        /* ─── Cloudinary upload ─── */
-        window.handleVideoSelect = e => {
-            const file = e.target.files[0];
-            if (!file) return;
-            if (file.size > 100*1024*1024) { showToast("Video must be under 100MB.",true); return; }
-            uploadToCloudinary(file);
-        };
-
-        function uploadToCloudinary(file) {
-            const area=document.getElementById("uploadArea"),
-                  prog=document.getElementById("uploadProgressWrap"),
-                  fill=document.getElementById("uploadProgressFill"),
-                  text=document.getElementById("uploadProgressText"),
-                  succ=document.getElementById("uploadSuccess"),
-                  sname=document.getElementById("uploadSuccessName"),
-                  def=document.getElementById("uploadDefault");
-            area.classList.add("has-file"); def.style.display="none"; prog.classList.add("visible");
-            succ.classList.remove("visible"); pendingVideoUrl=null;
-            const fd=new FormData(); fd.append("file",file); fd.append("upload_preset",UPLOAD_PRESET);
-            const xhr=new XMLHttpRequest();
-            xhr.open("POST",`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`);
-            xhr.upload.onprogress=ev=>{ if(ev.lengthComputable){ const p=Math.round(ev.loaded/ev.total*100); fill.style.width=p+"%"; text.textContent=`Uploading… ${p}%`; } };
-            xhr.onload=()=>{
-                if(xhr.status===200){ const d=JSON.parse(xhr.responseText); pendingVideoUrl=d.secure_url; prog.classList.remove("visible"); sname.textContent=file.name; succ.classList.add("visible"); showToast("Video uploaded! 🎬"); }
-                else { prog.classList.remove("visible"); area.classList.remove("has-file"); def.style.display="block"; showToast("Upload failed.",true); }
+            /* ── Same Issue — one click, no username prompt ── */
+            window.handleSameIssue = async () => {
+                if (!currentIssueKey) return;
+                if (hasVoted(currentIssueKey)) return;
+                const safeKey = getAnonId().replace(/[.#$[\]]/g,"_");
+                try {
+                    await update(ref(db,`worldIssues/${currentIssueKey}/sameVotes`), {[safeKey]:true});
+                    addVote(currentIssueKey);
+                    showToast("Vote recorded! 🙋");
+                    const btn = document.getElementById("sameIssueBtn");
+                    btn.innerHTML = "✅ Confirmed"; btn.classList.add("voted"); btn.disabled = true;
+                } catch { showToast("Failed to record vote.", true); }
             };
-            xhr.onerror=()=>{ prog.classList.remove("visible"); area.classList.remove("has-file"); def.style.display="block"; showToast("Upload error.",true); };
-            xhr.send(fd);
-        }
 
-        window.clearVideoUpload = e => {
-            e.stopPropagation(); pendingVideoUrl=null;
-            document.getElementById("uploadSuccess").classList.remove("visible");
-            document.getElementById("uploadProgressWrap").classList.remove("visible");
-            document.getElementById("uploadArea").classList.remove("has-file");
-            document.getElementById("uploadDefault").style.display="block";
-            document.getElementById("videoFileInput").value="";
-            document.getElementById("uploadProgressFill").style.width="0%";
-        };
+            /* ── Delete own issue ── */
+            window.promptDeleteIssue = (key) => {
+                pendingDeleteIssueFn = async () => {
+                    await remove(ref(db,`worldIssues/${key}`));
+                    closeModal("detailModal");
+                    showToast("Your issue was deleted.");
+                };
+                openModal("deleteIssueModal");
+            };
+            document.getElementById("deleteIssueConfirmBtn").addEventListener("click", async () => {
+                if (!pendingDeleteIssueFn) return;
+                try { await pendingDeleteIssueFn(); } catch { showToast("Delete failed.", true); }
+                closeModal("deleteIssueModal"); pendingDeleteIssueFn = null;
+            });
 
-        window.submitIssue = async () => {
-            let username = getUser();
-            if (!username) username = (document.getElementById("submitUsername")?.value||"").trim();
-            const title       = document.getElementById("submitTitle").value.trim();
-            const description = document.getElementById("submitDesc").value.trim();
-            if (!username)    { showToast("Please enter your username.",true); return; }
-            if (!title)       { showToast("Please enter an issue title.",true); return; }
-            if (!description) { showToast("Please describe the issue.",true); return; }
-            const btn = document.getElementById("submitIssueBtn");
-            btn.disabled=true; btn.textContent="Submitting…";
-            try {
-                setUser(username);
-                await push(ref(db,"worldIssues"),{username,title,description,videoUrl:pendingVideoUrl||null,status:"issue",createdAt:serverTimestamp()});
-                document.getElementById("submitTitle").value="";
-                document.getElementById("submitDesc").value="";
-                document.getElementById("descCharHint").textContent="0 / 1000";
-                clearVideoUpload({stopPropagation:()=>{}});
-                closeModal("submitModal");
-                showToast("Issue reported! 🚨");
-            } catch(e){ console.error(e); showToast("Failed to submit. Try again.",true); }
-            finally { btn.disabled=false; btn.innerHTML="<span>🚨</span> Submit Issue"; }
-        };
+            /* ── Delete own comment ── */
+            window.promptDeleteComment = (issueKey, commentKey) => {
+                pendingDeleteCommentFn = async () => {
+                    await remove(ref(db,`worldIssues/${issueKey}/comments/${commentKey}`));
+                    showToast("Comment deleted.");
+                };
+                openModal("deleteCommentModal");
+            };
+            document.getElementById("deleteCommentConfirmBtn").addEventListener("click", async () => {
+                if (!pendingDeleteCommentFn) return;
+                try { await pendingDeleteCommentFn(); } catch { showToast("Delete failed.", true); }
+                closeModal("deleteCommentModal"); pendingDeleteCommentFn = null;
+            });
 
-        /* ─── Drag-and-drop video ─── */
-        const ua=document.getElementById("uploadArea");
-        ua.addEventListener("dragover",  e=>{e.preventDefault();ua.classList.add("dragging");});
-        ua.addEventListener("dragleave", ()=>ua.classList.remove("dragging"));
-        ua.addEventListener("drop",      e=>{e.preventDefault();ua.classList.remove("dragging");const f=e.dataTransfer.files[0];if(f&&f.type.startsWith("video/"))uploadToCloudinary(f);});
+            /* ── Post comment ── */
+            window.submitComment = async () => {
+                const text = document.getElementById("commentText")?.value.trim();
+                if (!text) { showToast("Please write a comment.", true); return; }
+                if (!currentIssueKey) return;
+                try {
+                    await push(ref(db,`worldIssues/${currentIssueKey}/comments`), {
+                        anonId: getAnonId(), text, createdAt: serverTimestamp()
+                    });
+                    document.getElementById("commentText").value = "";
+                    showToast("Comment posted! 💬");
+                } catch { showToast("Failed to post comment.", true); }
+            };
 
-        /* ─── Init ─── */
-        renderUsernameBar();
-    </script>
-</body>
+            /* ── Submit Issue ── */
+            window.openSubmitModal = () => openModal("submitModal");
+
+            document.getElementById("submitDesc").addEventListener("input", function() {
+                document.getElementById("descCharHint").textContent = `${this.value.length} / 1000`;
+            });
+
+            /* ── Cloudinary upload ── */
+            window.handleVideoSelect = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                if (file.size > 100*1024*1024) { showToast("Video must be under 100MB.", true); return; }
+                uploadToCloudinary(file);
+            };
+
+            function uploadToCloudinary(file) {
+                const area=document.getElementById("uploadArea"), prog=document.getElementById("uploadProgressWrap"),
+                    fill=document.getElementById("uploadProgressFill"), text=document.getElementById("uploadProgressText"),
+                    succ=document.getElementById("uploadSuccess"), sname=document.getElementById("uploadSuccessName"),
+                    def=document.getElementById("uploadDefault");
+                area.classList.add("has-file"); def.style.display="none";
+                prog.classList.add("visible"); succ.classList.remove("visible"); pendingVideoUrl=null;
+                const fd = new FormData(); fd.append("file",file); fd.append("upload_preset",UPLOAD_PRESET);
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST",`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`);
+                xhr.upload.onprogress = (ev) => {
+                    if (ev.lengthComputable) { const p=Math.round(ev.loaded/ev.total*100); fill.style.width=p+"%"; text.textContent=`Uploading… ${p}%`; }
+                };
+                xhr.onload = () => {
+                    if (xhr.status===200) {
+                        const d=JSON.parse(xhr.responseText); pendingVideoUrl=d.secure_url;
+                        prog.classList.remove("visible"); sname.textContent=file.name; succ.classList.add("visible"); showToast("Video uploaded! 🎬");
+                    } else { prog.classList.remove("visible"); area.classList.remove("has-file"); def.style.display="block"; showToast("Upload failed.", true); }
+                };
+                xhr.onerror = () => { prog.classList.remove("visible"); area.classList.remove("has-file"); def.style.display="block"; showToast("Upload error.", true); };
+                xhr.send(fd);
+            }
+
+            window.clearVideoUpload = (e) => {
+                e.stopPropagation(); pendingVideoUrl=null;
+                document.getElementById("uploadSuccess").classList.remove("visible");
+                document.getElementById("uploadProgressWrap").classList.remove("visible");
+                document.getElementById("uploadArea").classList.remove("has-file");
+                document.getElementById("uploadDefault").style.display="block";
+                document.getElementById("videoFileInput").value="";
+                document.getElementById("uploadProgressFill").style.width="0%";
+            };
+
+            window.submitIssue = async () => {
+                const title = document.getElementById("submitTitle").value.trim();
+                const description = document.getElementById("submitDesc").value.trim();
+                if (!title) { showToast("Please enter an issue title.", true); return; }
+                if (!description) { showToast("Please describe the issue.", true); return; }
+                const btn = document.getElementById("submitIssueBtn");
+                btn.disabled=true; btn.textContent="Submitting…";
+                try {
+                    await push(ref(db,"worldIssues"), {
+                        anonId: getAnonId(),   // stored for ownership only, never shown
+                        title, description,
+                        videoUrl: pendingVideoUrl||null,
+                        status: "issue",
+                        createdAt: serverTimestamp()
+                    });
+                    document.getElementById("submitTitle").value="";
+                    document.getElementById("submitDesc").value="";
+                    document.getElementById("descCharHint").textContent="0 / 1000";
+                    clearVideoUpload({stopPropagation:()=>{}});
+                    closeModal("submitModal");
+                    showToast("Issue reported anonymously! 🚨");
+                } catch(e) { console.error(e); showToast("Failed to submit. Try again.", true); }
+                finally { btn.disabled=false; btn.innerHTML="<span>🚨</span> Submit Anonymously"; }
+            };
+
+            /* ── Drag-and-drop video ── */
+            const ua = document.getElementById("uploadArea");
+            ua.addEventListener("dragover", (e) => { e.preventDefault(); ua.classList.add("dragging"); });
+            ua.addEventListener("dragleave", () => ua.classList.remove("dragging"));
+            ua.addEventListener("drop", (e) => {
+                e.preventDefault(); ua.classList.remove("dragging");
+                const f=e.dataTransfer.files[0];
+                if (f && f.type.startsWith("video/")) uploadToCloudinary(f);
+            });
+        </script>
+    </body>
 </html>
