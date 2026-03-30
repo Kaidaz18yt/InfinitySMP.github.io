@@ -87,13 +87,6 @@
         .particle:nth-child(5) { left:75%; animation-delay:12s; }
         .particle:nth-child(6) { left:90%; animation-delay:2s; }
 
-        .container {
-            width: 100%; max-width: 900px;
-            margin: 0 auto;
-            animation: fadeInUp 0.8s cubic-bezier(0.16,1,0.3,1);
-            position: relative; z-index:1;
-        }
-
         @keyframes fadeInUp {
             from { opacity:0; transform:translateY(30px); }
             to   { opacity:1; transform:translateY(0); }
@@ -101,6 +94,124 @@
         @keyframes fadeIn {
             from { opacity:0; transform:translateY(10px); }
             to   { opacity:1; transform:translateY(0); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-6px); }
+            80% { transform: translateX(6px); }
+        }
+
+        /* ── Lock Screen ── */
+        #lockScreen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: opacity 0.4s ease;
+        }
+        #lockScreen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .lock-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 48px 40px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .lock-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+        }
+        .lock-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .lock-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .lock-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+        .lock-input {
+            width: 100%;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            color: var(--text-primary);
+            font-size: 24px;
+            font-family: "JetBrains Mono", monospace;
+            text-align: center;
+            letter-spacing: 0.3em;
+            outline: none;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+        }
+        .lock-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.12);
+        }
+        .lock-input.error {
+            border-color: rgba(244, 67, 54, 0.5);
+            animation: shake 0.4s ease;
+        }
+        .lock-error {
+            font-size: 13px;
+            color: var(--priority-high);
+            margin-bottom: 16px;
+            min-height: 20px;
+        }
+        .lock-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(33, 150, 243, 0.3);
+        }
+        .lock-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(33, 150, 243, 0.5);
+        }
+
+        .container {
+            width: 100%; max-width: 900px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s cubic-bezier(0.16,1,0.3,1);
+            position: relative; z-index:1;
         }
 
         /* ── HEADER ── */
@@ -135,6 +246,23 @@
         .subtitle {
             font-size: 14px; color: var(--text-tertiary);
             font-family: "JetBrains Mono", monospace;
+        }
+
+        .lock-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-tertiary);
+            font-size: 13px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+            transition: color 0.2s;
+            margin-top: 12px;
+        }
+        .lock-link:hover {
+            color: var(--priority-high);
         }
 
         /* ── STATS BAR ── */
@@ -577,6 +705,24 @@
     <div class="particle"></div><div class="particle"></div>
 </div>
 
+<!-- Lock Screen -->
+<div id="lockScreen">
+    <div class="lock-card">
+        <span class="lock-icon">🔐</span>
+        <div class="lock-title">Protected Access</div>
+        <div class="lock-subtitle">Enter password to access the todo list</div>
+        <input
+            type="password"
+            class="lock-input"
+            id="lockInput"
+            placeholder="••••"
+            maxlength="20"
+            onkeydown="if(event.key==='Enter') attemptUnlock()" />
+        <div class="lock-error" id="lockError"></div>
+        <button class="lock-btn" onclick="attemptUnlock()">Unlock</button>
+    </div>
+</div>
+
 <!-- Edit Modal -->
 <div class="modal-backdrop" id="editModal">
     <div class="modal">
@@ -607,13 +753,14 @@
 
 <div id="toast"></div>
 
-<div class="container">
+<div class="container" id="mainContent" style="display: none">
     <div class="header">
         <a href="https://infinitysmp.github.io/" class="logo">
             <img src="https://infinitysmp.github.io/logo.png" alt="Infinity SMP" />
         </a>
         <h1>Todo List</h1>
         <p class="subtitle">// real-time • collaborative • organised</p>
+        <button class="lock-link" onclick="lockPanel()">🔒 Lock</button>
         <br>
         <div class="live-badge" id="liveBadge">
             <span class="live-dot"></span> Connecting...
@@ -719,7 +866,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, onValue, push, set, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, onValue, push, set, remove, update, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBgV9PoUFut3FPc0iChFNm2-h6-Uc5z6s0",
@@ -739,17 +886,54 @@ let allTasks = {};
 let currentFilter = "all";
 let editingKey = null;
 
+// ── Auth ──
+window.attemptUnlock = async function() {
+    const input = document.getElementById("lockInput").value;
+    const errEl = document.getElementById("lockError");
+    errEl.textContent = "Checking…";
+    let pw = "0000";
+    try {
+        const s = await get(ref(db, "admin/password"));
+        pw = String(s.val() ?? "0000");
+    } catch {}
+    if (input === pw) {
+        errEl.textContent = "";
+        const ls = document.getElementById("lockScreen");
+        ls.classList.add("hidden");
+        setTimeout(() => (ls.style.display = "none"), 400);
+        document.getElementById("mainContent").style.display = "block";
+        startListener();
+    } else {
+        errEl.textContent = "Incorrect password.";
+        const li = document.getElementById("lockInput");
+        li.classList.add("error");
+        li.value = "";
+        setTimeout(() => li.classList.remove("error"), 500);
+    }
+};
+
+window.lockPanel = function() {
+    const ls = document.getElementById("lockScreen");
+    ls.style.display = "flex";
+    ls.classList.remove("hidden");
+    document.getElementById("lockInput").value = "";
+    document.getElementById("lockError").textContent = "";
+    document.getElementById("mainContent").style.display = "none";
+};
+
 // ── Real-time listener ──────────────────────────────────────
-onValue(todosRef, (snap) => {
-    allTasks = snap.val() || {};
-    renderTasks();
-    updateStats();
-    setLive(true);
-    document.getElementById("lastUpdated").textContent = "Last synced: " + new Date().toLocaleTimeString();
-}, (err) => {
-    console.error(err);
-    setLive(false);
-});
+function startListener() {
+    onValue(todosRef, (snap) => {
+        allTasks = snap.val() || {};
+        renderTasks();
+        updateStats();
+        setLive(true);
+        document.getElementById("lastUpdated").textContent = "Last synced: " + new Date().toLocaleTimeString();
+    }, (err) => {
+        console.error(err);
+        setLive(false);
+    });
+}
 
 function setLive(ok) {
     const b = document.getElementById("liveBadge");
